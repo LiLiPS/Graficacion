@@ -10,7 +10,7 @@ import java.awt.Color;
 /**
  *
  * @author lili9
-  Comentario equis.
+  Comentario equis x2.
  */
 public class Interfaz extends javax.swing.JFrame {
     /**
