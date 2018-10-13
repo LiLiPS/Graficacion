@@ -11,9 +11,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author Liliana Parada Sanchez
  * @author Flor Paulina Rodriguez Borja
- * @author Margarita del Carmen Sierra Mgit pull oruñoz
+ * @author Margarita del Carmen Sierra Muñoz
  * @author Arantxa Patricia Ibarra Muñoz
- * @author lili9
  */
 
 public class Interfaz extends javax.swing.JFrame {
