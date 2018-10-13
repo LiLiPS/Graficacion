@@ -5,14 +5,13 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author Liliana Parada Sanchez
  * @author Flor Paulina Rodriguez Borja
- * @author Margarita del Carmen Sierra Muñoz
+ * @author Margarita del Carmen Sierra Mgit pull oruñoz
  * @author Arantxa Patricia Ibarra Muñoz
  */
 
@@ -22,13 +21,14 @@ public class Interfaz extends javax.swing.JFrame {
     private int valor;
     private FileNameExtensionFilter filtro;
     private File archivoElegido;
+    JLabel label;
     
     public Interfaz() {
         initComponents();
         
         //Acomodo JFrame
         this.setResizable(false);
-        this.setSize(600, 400);
+        this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
     }
 
@@ -167,8 +167,8 @@ public class Interfaz extends javax.swing.JFrame {
         fileChooser.setFileFilter(filtro);
         valor = fileChooser.showOpenDialog(this);
         if (valor == JFileChooser.APPROVE_OPTION) {
-            JLabel label = new JLabel();
-            label.setBounds(10, 10, 200, 279);
+            label = new JLabel();
+            label.setBounds(10, 10, 600, 579);
             jPanel1.add(label);
             archivoElegido = fileChooser.getSelectedFile();
             path = archivoElegido.getAbsolutePath();
