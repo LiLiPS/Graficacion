@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
  * @author Liliana Parada Sanchez
  * @author Flor Paulina Rodriguez Borja
  * @author Margarita del Carmen Sierra Muñoz
@@ -223,7 +222,6 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
         // TODO add your handling code here:
-                int[] coordenadas = {evt.getX(), evt.getY()};
         mouseX = evt.getX(); 
         mouseY = evt.getY(); 
         
