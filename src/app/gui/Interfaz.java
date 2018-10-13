@@ -91,6 +91,11 @@ public class Interfaz extends javax.swing.JFrame {
         MenuArchivo.add(ArchivoNuevo);
 
         ArchivoAbrir.setText("Abrir");
+        ArchivoAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ArchivoAbrirActionPerformed(evt);
+            }
+        });
         MenuArchivo.add(ArchivoAbrir);
 
         ArchivoGuardar.setText("Guardar");
@@ -158,7 +163,7 @@ public class Interfaz extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    //Evento para abrir FileChooser desde MenuItem
+    //Evento para abrir FileChooser desde MenuItem y subir imagen
     private void ImagenAgregaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImagenAgregaActionPerformed
         descripcion = "*.Imagenes";
         filtro = new FileNameExtensionFilter(descripcion,
@@ -179,6 +184,23 @@ public class Interfaz extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_ImagenAgregaActionPerformed
+
+    //Evento para abrir FileChooser desde MenuItem y leer archivo de grafico
+    private void ArchivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoAbrirActionPerformed
+        descripcion = "*.Grafico";
+        filtro = new FileNameExtensionFilter(descripcion,
+                "graf");
+        fileChooser.addChoosableFileFilter(filtro);
+        fileChooser.setFileFilter(filtro);
+        valor = fileChooser.showOpenDialog(this);
+        if (valor == JFileChooser.APPROVE_OPTION) {
+            archivoElegido = fileChooser.getSelectedFile();
+            path = archivoElegido.getAbsolutePath();
+            /**
+             * try/catch to get graph
+             */
+        }
+    }//GEN-LAST:event_ArchivoAbrirActionPerformed
     
     //Metodo para redimensionar imagenes
     public ImageIcon redimension(String ImagePath) {
