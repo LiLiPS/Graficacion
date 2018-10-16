@@ -1,9 +1,11 @@
 package app.gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import javax.swing.ImageIcon;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -22,6 +24,7 @@ public class Interfaz extends javax.swing.JFrame {
     private FileNameExtensionFilter filtro;
     private File archivoElegido;
     JLabel label;
+    private Color color;
     private int mouseX;
     private int mouseY;
     private int xInicial;
@@ -189,6 +192,11 @@ public class Interfaz extends javax.swing.JFrame {
         MenuOpciones.add(OpcGrosor);
 
         OpcColor.setText("Color");
+        OpcColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpcColorActionPerformed(evt);
+            }
+        });
         MenuOpciones.add(OpcColor);
 
         jMenuBar1.add(MenuOpciones);
@@ -262,6 +270,11 @@ public class Interfaz extends javax.swing.JFrame {
         jPanel1.removeAll();
         jPanel1.repaint();
     }//GEN-LAST:event_BtnBorrarActionPerformed
+
+    private void OpcColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpcColorActionPerformed
+        //Abre en un cuadro de dialogo el color chooser y lo guarda
+        color = JColorChooser.showDialog(null, "Choose a Color", Color.BLUE);
+    }//GEN-LAST:event_OpcColorActionPerformed
     
     //Metodo para redimensionar imagenes
     public ImageIcon redimension(String ImagePath) {
@@ -273,10 +286,13 @@ public class Interfaz extends javax.swing.JFrame {
         return image;
     }
     
-        public void dibujaFigura(Graphics g){
+    public void dibujaFigura(Graphics g) {
         int ancho, alto;
-            ancho = xFinal - xInicial;
-            alto = yFinal - yInicial;
+        ancho = xFinal - xInicial;
+        alto = yFinal - yInicial;
+        
+        g.setColor(color); //Pone el color seleccionado en el color chooser
+        
         switch (modo) {
             case 0:
                 g.drawLine(xInicial, yInicial, xFinal, yFinal);
@@ -286,9 +302,9 @@ public class Interfaz extends javax.swing.JFrame {
                 break;
             case 2:
                 g.drawRect(xInicial, yInicial, ancho, alto);
-                break; 
+                break;
             case 3:
-                getGraphics().drawLine( mouseX,mouseY,xFinal,yFinal); 
+                getGraphics().drawLine(mouseX, mouseY, xFinal, yFinal);
                 repaint();
             default:
                 throw new AssertionError();
