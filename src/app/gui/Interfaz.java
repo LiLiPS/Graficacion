@@ -1,8 +1,12 @@
 package app.gui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
@@ -35,10 +39,12 @@ public class Interfaz extends javax.swing.JFrame {
     private int ypos[];
     private boolean inicio = true;
     private int modo = 0;
+    private int grosor = 0;
     
     public Interfaz() {
         initComponents();
         
+        jPanel1.setVisible(false);//Se mostrara al dar clic en 'nuevo'
         //Acomodo JFrame
         this.setResizable(false);
         this.setSize(1000, 700);
@@ -61,7 +67,7 @@ public class Interfaz extends javax.swing.JFrame {
         FormaLinea = new javax.swing.JMenuItem();
         FormaRectang = new javax.swing.JMenuItem();
         FormaOvalo = new javax.swing.JMenuItem();
-        FormaTriang = new javax.swing.JMenuItem();
+        FormaElipse = new javax.swing.JMenuItem();
         MenuTexto = new javax.swing.JMenu();
         TextoAgregar = new javax.swing.JMenuItem();
         SubMFuente = new javax.swing.JMenu();
@@ -71,6 +77,10 @@ public class Interfaz extends javax.swing.JFrame {
         ImagenAgrega = new javax.swing.JMenuItem();
         MenuOpciones = new javax.swing.JMenu();
         OpcGrosor = new javax.swing.JMenu();
+        Grosor1 = new javax.swing.JRadioButtonMenuItem();
+        Grosor2 = new javax.swing.JRadioButtonMenuItem();
+        Grosor3 = new javax.swing.JRadioButtonMenuItem();
+        Grosor4 = new javax.swing.JRadioButtonMenuItem();
         OpcColor = new javax.swing.JMenuItem();
 
         fileChooser.setDialogTitle("Explorador de Archivos");
@@ -111,6 +121,11 @@ public class Interfaz extends javax.swing.JFrame {
         MenuArchivo.setText("Archivo");
 
         ArchivoNuevo.setText("Nuevo");
+        ArchivoNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ArchivoNuevoActionPerformed(evt);
+            }
+        });
         MenuArchivo.add(ArchivoNuevo);
 
         ArchivoAbrir.setText("Abrir");
@@ -147,13 +162,13 @@ public class Interfaz extends javax.swing.JFrame {
         });
         MenuFormas.add(FormaOvalo);
 
-        FormaTriang.setText("Triangulo");
-        FormaTriang.addMouseListener(new java.awt.event.MouseAdapter() {
+        FormaElipse.setText("Elipse");
+        FormaElipse.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                FormaTriangMousePressed(evt);
+                FormaElipseMousePressed(evt);
             }
         });
-        MenuFormas.add(FormaTriang);
+        MenuFormas.add(FormaElipse);
 
         jMenuBar1.add(MenuFormas);
 
@@ -189,6 +204,40 @@ public class Interfaz extends javax.swing.JFrame {
         MenuOpciones.setText("Opciones");
 
         OpcGrosor.setText("Grosor de linea");
+
+        Grosor1.setSelected(true);
+        Grosor1.setText("1.0");
+        Grosor1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Grosor1ActionPerformed(evt);
+            }
+        });
+        OpcGrosor.add(Grosor1);
+
+        Grosor2.setText("2.0");
+        Grosor2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Grosor2ActionPerformed(evt);
+            }
+        });
+        OpcGrosor.add(Grosor2);
+
+        Grosor3.setText("3.0");
+        Grosor3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Grosor3ActionPerformed(evt);
+            }
+        });
+        OpcGrosor.add(Grosor3);
+
+        Grosor4.setText("4.0");
+        Grosor4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Grosor4ActionPerformed(evt);
+            }
+        });
+        OpcGrosor.add(Grosor4);
+
         MenuOpciones.add(OpcGrosor);
 
         OpcColor.setText("Color");
@@ -229,7 +278,6 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_ImagenAgregaActionPerformed
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
-        // TODO add your handling code here:
         mouseX = evt.getX(); 
         mouseY = evt.getY(); 
         
@@ -247,26 +295,22 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void FormaLineaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaLineaMousePressed
-        // TODO add your handling code here:
         modo = 0;
     }//GEN-LAST:event_FormaLineaMousePressed
 
     private void FormaRectangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaRectangMousePressed
-        // TODO add your handling code here:
         modo = 2;
     }//GEN-LAST:event_FormaRectangMousePressed
 
     private void FormaOvaloMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaOvaloMousePressed
-        // TODO add your handling code here:
         modo = 1;
     }//GEN-LAST:event_FormaOvaloMousePressed
 
-    private void FormaTriangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaTriangMousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_FormaTriangMousePressed
+    private void FormaElipseMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaElipseMousePressed
+        modo = 4;
+    }//GEN-LAST:event_FormaElipseMousePressed
 
     private void BtnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBorrarActionPerformed
-        // TODO add your handling code here:
         jPanel1.removeAll();
         jPanel1.repaint();
     }//GEN-LAST:event_BtnBorrarActionPerformed
@@ -275,6 +319,26 @@ public class Interfaz extends javax.swing.JFrame {
         //Abre en un cuadro de dialogo el color chooser y lo guarda
         color = JColorChooser.showDialog(null, "Choose a Color", Color.BLUE);
     }//GEN-LAST:event_OpcColorActionPerformed
+
+    private void Grosor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor1ActionPerformed
+        grosor=0;        
+    }//GEN-LAST:event_Grosor1ActionPerformed
+
+    private void Grosor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor2ActionPerformed
+        grosor=1;
+    }//GEN-LAST:event_Grosor2ActionPerformed
+
+    private void Grosor3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor3ActionPerformed
+        grosor=2;
+    }//GEN-LAST:event_Grosor3ActionPerformed
+
+    private void Grosor4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor4ActionPerformed
+        grosor=3;
+    }//GEN-LAST:event_Grosor4ActionPerformed
+
+    private void ArchivoNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoNuevoActionPerformed
+        jPanel1.setVisible(true);
+    }//GEN-LAST:event_ArchivoNuevoActionPerformed
     
     //Metodo para redimensionar imagenes
     public ImageIcon redimension(String ImagePath) {
@@ -287,25 +351,45 @@ public class Interfaz extends javax.swing.JFrame {
     }
     
     public void dibujaFigura(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g; //Convierte Graphics a Graphics2D para poder cambiar grosor
         int ancho, alto;
         ancho = xFinal - xInicial;
         alto = yFinal - yInicial;
         
         g.setColor(color); //Pone el color seleccionado en el color chooser
         
-        switch (modo) {
-            case 0:
-                g.drawLine(xInicial, yInicial, xFinal, yFinal);
+        switch(grosor){ //Segun el RadioButton elegido cambia el grosor de linea
+            case 0: 
+                g2.setStroke(new BasicStroke(1));
                 break;
             case 1:
-                g.drawOval(xInicial, yInicial, ancho, alto);
+                g2.setStroke(new BasicStroke(2));
                 break;
             case 2:
-                g.drawRect(xInicial, yInicial, ancho, alto);
+                g2.setStroke(new BasicStroke(3));
+                break;
+            case 3:
+                g2.setStroke(new BasicStroke(4));
+                break;
+        }
+        
+        switch (modo) {
+            case 0:
+                g2.drawLine(xInicial, yInicial, xFinal, yFinal);
+                break;
+            case 1:
+                g2.drawOval(xInicial, yInicial, ancho, alto);
+                break;
+            case 2:
+                g2.drawRect(xInicial, yInicial, ancho, alto);
                 break;
             case 3:
                 getGraphics().drawLine(mouseX, mouseY, xFinal, yFinal);
                 repaint();
+            case 4:
+                Shape elipse = new Ellipse2D.Float(xInicial, yInicial, ancho, alto);
+                g2.draw(elipse);
+                break;
             default:
                 throw new AssertionError();
         }
@@ -324,12 +408,16 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenuItem ArchivoGuardar;
     private javax.swing.JMenuItem ArchivoNuevo;
     private javax.swing.JButton BtnBorrar;
+    private javax.swing.JMenuItem FormaElipse;
     private javax.swing.JMenuItem FormaLinea;
     private javax.swing.JMenuItem FormaOvalo;
     private javax.swing.JMenuItem FormaRectang;
-    private javax.swing.JMenuItem FormaTriang;
     private javax.swing.JMenu FuenteTam;
     private javax.swing.JMenu FuenteTipo;
+    private javax.swing.JRadioButtonMenuItem Grosor1;
+    private javax.swing.JRadioButtonMenuItem Grosor2;
+    private javax.swing.JRadioButtonMenuItem Grosor3;
+    private javax.swing.JRadioButtonMenuItem Grosor4;
     private javax.swing.JMenuItem ImagenAgrega;
     private javax.swing.JMenu MenuArchivo;
     private javax.swing.JMenu MenuFormas;
