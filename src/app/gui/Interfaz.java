@@ -2,12 +2,16 @@ package app.gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.io.File;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
@@ -49,6 +53,7 @@ public class Interfaz extends javax.swing.JFrame {
         this.setResizable(false);
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
+        loadFont(); 
     }
 
     @SuppressWarnings("unchecked")
@@ -57,7 +62,14 @@ public class Interfaz extends javax.swing.JFrame {
 
         fileChooser = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         BtnBorrar = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
+        jLabel3 = new javax.swing.JLabel();
+        cbFont = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        cbSize = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuArchivo = new javax.swing.JMenu();
         ArchivoNuevo = new javax.swing.JMenuItem();
@@ -71,8 +83,8 @@ public class Interfaz extends javax.swing.JFrame {
         MenuTexto = new javax.swing.JMenu();
         TextoAgregar = new javax.swing.JMenuItem();
         SubMFuente = new javax.swing.JMenu();
-        FuenteTipo = new javax.swing.JMenu();
         FuenteTam = new javax.swing.JMenu();
+        FuenteTipo = new javax.swing.JMenu();
         MenuImagen = new javax.swing.JMenu();
         ImagenAgrega = new javax.swing.JMenuItem();
         MenuOpciones = new javax.swing.JMenu();
@@ -97,15 +109,19 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane2.setViewportView(jTextPane1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 598, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 354, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 296, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -117,6 +133,34 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
         getContentPane().add(BtnBorrar, java.awt.BorderLayout.SOUTH);
+
+        jToolBar1.setRollover(true);
+
+        jLabel3.setText("Font");
+        jToolBar1.add(jLabel3);
+
+        cbFont.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFont.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbFontActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(cbFont);
+
+        jLabel4.setText("Size");
+        jToolBar1.add(jLabel4);
+
+        cbSize.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "12", "16", "20", "24", "28", "32", "36", "40", "44", "48", "52", "56", "60" }));
+        cbSize.setToolTipText("Select font size");
+        cbSize.setMinimumSize(new java.awt.Dimension(400, 20));
+        cbSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSizeActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(cbSize);
+
+        getContentPane().add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
         MenuArchivo.setText("Archivo");
 
@@ -179,11 +223,11 @@ public class Interfaz extends javax.swing.JFrame {
 
         SubMFuente.setText("Fuente");
 
-        FuenteTipo.setText("Tipo");
-        SubMFuente.add(FuenteTipo);
-
         FuenteTam.setText("Tamano");
         SubMFuente.add(FuenteTam);
+
+        FuenteTipo.setText("Tipo");
+        SubMFuente.add(FuenteTipo);
 
         MenuTexto.add(SubMFuente);
 
@@ -311,13 +355,17 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_FormaElipseMousePressed
 
     private void BtnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBorrarActionPerformed
-        jPanel1.removeAll();
-        jPanel1.repaint();
+       // jPanel1.removeAll();
+        jPanel1.repaint();     
     }//GEN-LAST:event_BtnBorrarActionPerformed
 
     private void OpcColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpcColorActionPerformed
         //Abre en un cuadro de dialogo el color chooser y lo guarda
         color = JColorChooser.showDialog(null, "Choose a Color", Color.BLUE);
+        
+        if (color !=null){
+            jTextPane1.setForeground(color);
+        }        
     }//GEN-LAST:event_OpcColorActionPerformed
 
     private void Grosor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor1ActionPerformed
@@ -339,6 +387,16 @@ public class Interfaz extends javax.swing.JFrame {
     private void ArchivoNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoNuevoActionPerformed
         jPanel1.setVisible(true);
     }//GEN-LAST:event_ArchivoNuevoActionPerformed
+
+    private void cbFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFontActionPerformed
+        jTextPane1.setFont(new Font(cbFont.getSelectedItem().toString(),
+        Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString())));
+    }//GEN-LAST:event_cbFontActionPerformed
+
+    private void cbSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSizeActionPerformed
+       jTextPane1.setFont(new Font(cbFont.getSelectedItem().toString(),
+        Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString())));
+    }//GEN-LAST:event_cbSizeActionPerformed
     
     //Metodo para redimensionar imagenes
     public ImageIcon redimension(String ImagePath) {
@@ -350,6 +408,15 @@ public class Interfaz extends javax.swing.JFrame {
         return image;
     }
     
+    private void loadFont() {
+    GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    //Otiene todas las fuentes
+    String[] fontNames = gEnv.getAvailableFontFamilyNames();
+    // Las agrega al ComboBox
+    ComboBoxModel model = new DefaultComboBoxModel(fontNames);
+    cbFont.setModel(model);
+    } 
+
     public void dibujaFigura(Graphics g) {
         Graphics2D g2 = (Graphics2D) g; //Convierte Graphics a Graphics2D para poder cambiar grosor
         int ancho, alto;
@@ -428,8 +495,15 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenu OpcGrosor;
     private javax.swing.JMenu SubMFuente;
     private javax.swing.JMenuItem TextoAgregar;
+    private javax.swing.JComboBox<String> cbFont;
+    private javax.swing.JComboBox<String> cbSize;
     private javax.swing.JFileChooser fileChooser;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }
