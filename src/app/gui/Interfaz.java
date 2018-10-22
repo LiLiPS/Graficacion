@@ -369,19 +369,31 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_OpcColorActionPerformed
 
     private void Grosor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor1ActionPerformed
-        grosor=0;        
+        grosor=0;  
+        Grosor2.setSelected(false);
+        Grosor3.setSelected(false);
+        Grosor4.setSelected(false);
     }//GEN-LAST:event_Grosor1ActionPerformed
 
     private void Grosor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor2ActionPerformed
         grosor=1;
+        Grosor1.setSelected(false);
+        Grosor3.setSelected(false);
+        Grosor4.setSelected(false);
     }//GEN-LAST:event_Grosor2ActionPerformed
 
     private void Grosor3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor3ActionPerformed
         grosor=2;
+        Grosor1.setSelected(false);
+        Grosor2.setSelected(false);
+        Grosor4.setSelected(false);
     }//GEN-LAST:event_Grosor3ActionPerformed
 
     private void Grosor4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor4ActionPerformed
         grosor=3;
+        Grosor1.setSelected(false);
+        Grosor2.setSelected(false);
+        Grosor3.setSelected(false);
     }//GEN-LAST:event_Grosor4ActionPerformed
 
     private void ArchivoNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoNuevoActionPerformed
