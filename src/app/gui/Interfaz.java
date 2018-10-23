@@ -43,6 +43,7 @@ public class Interfaz extends javax.swing.JFrame {
     private int ypos[];
     private boolean inicio = true;
     private int modo = 0;
+    private int modoR = 0;
     private int grosor = 0;
     
     public Interfaz() {
@@ -76,10 +77,15 @@ public class Interfaz extends javax.swing.JFrame {
         ArchivoAbrir = new javax.swing.JMenuItem();
         ArchivoGuardar = new javax.swing.JMenuItem();
         MenuFormas = new javax.swing.JMenu();
+        SinRellenoMenu = new javax.swing.JMenu();
         FormaLinea = new javax.swing.JMenuItem();
         FormaRectang = new javax.swing.JMenuItem();
         FormaOvalo = new javax.swing.JMenuItem();
         FormaElipse = new javax.swing.JMenuItem();
+        ConRellenoMenu = new javax.swing.JMenu();
+        RectangRelleno = new javax.swing.JMenuItem();
+        OvaloRelleno = new javax.swing.JMenuItem();
+        ElipseRelleno = new javax.swing.JMenuItem();
         MenuTexto = new javax.swing.JMenu();
         TextoAgregar = new javax.swing.JMenuItem();
         SubMFuente = new javax.swing.JMenu();
@@ -182,13 +188,15 @@ public class Interfaz extends javax.swing.JFrame {
 
         MenuFormas.setText("Formas");
 
+        SinRellenoMenu.setText("Sin relleno");
+
         FormaLinea.setText("Linea");
         FormaLinea.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 FormaLineaMousePressed(evt);
             }
         });
-        MenuFormas.add(FormaLinea);
+        SinRellenoMenu.add(FormaLinea);
 
         FormaRectang.setText("Rectangulo");
         FormaRectang.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -196,7 +204,7 @@ public class Interfaz extends javax.swing.JFrame {
                 FormaRectangMousePressed(evt);
             }
         });
-        MenuFormas.add(FormaRectang);
+        SinRellenoMenu.add(FormaRectang);
 
         FormaOvalo.setText("Ovalo");
         FormaOvalo.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -204,7 +212,7 @@ public class Interfaz extends javax.swing.JFrame {
                 FormaOvaloMousePressed(evt);
             }
         });
-        MenuFormas.add(FormaOvalo);
+        SinRellenoMenu.add(FormaOvalo);
 
         FormaElipse.setText("Elipse");
         FormaElipse.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -212,7 +220,37 @@ public class Interfaz extends javax.swing.JFrame {
                 FormaElipseMousePressed(evt);
             }
         });
-        MenuFormas.add(FormaElipse);
+        SinRellenoMenu.add(FormaElipse);
+
+        MenuFormas.add(SinRellenoMenu);
+
+        ConRellenoMenu.setText("Con relleno");
+
+        RectangRelleno.setText("Rectángulo");
+        RectangRelleno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RectangRellenoActionPerformed(evt);
+            }
+        });
+        ConRellenoMenu.add(RectangRelleno);
+
+        OvaloRelleno.setText("Óvalo");
+        OvaloRelleno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OvaloRellenoActionPerformed(evt);
+            }
+        });
+        ConRellenoMenu.add(OvaloRelleno);
+
+        ElipseRelleno.setText("Elipse");
+        ElipseRelleno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ElipseRellenoActionPerformed(evt);
+            }
+        });
+        ConRellenoMenu.add(ElipseRelleno);
+
+        MenuFormas.add(ConRellenoMenu);
 
         jMenuBar1.add(MenuFormas);
 
@@ -334,24 +372,29 @@ public class Interfaz extends javax.swing.JFrame {
             xFinal = evt.getX();
             yFinal = evt.getY();
             dibujaFigura(g);
+            relleno(g);
             inicio = true;
         }
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void FormaLineaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaLineaMousePressed
         modo = 0;
+        modoR = 0;
     }//GEN-LAST:event_FormaLineaMousePressed
 
     private void FormaRectangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaRectangMousePressed
         modo = 2;
+        modoR = 0;
     }//GEN-LAST:event_FormaRectangMousePressed
 
     private void FormaOvaloMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaOvaloMousePressed
         modo = 1;
+        modoR = 0;
     }//GEN-LAST:event_FormaOvaloMousePressed
 
     private void FormaElipseMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaElipseMousePressed
         modo = 4;
+        modoR = 0;
     }//GEN-LAST:event_FormaElipseMousePressed
 
     private void BtnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBorrarActionPerformed
@@ -409,6 +452,21 @@ public class Interfaz extends javax.swing.JFrame {
        jTextPane1.setFont(new Font(cbFont.getSelectedItem().toString(),
         Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString())));
     }//GEN-LAST:event_cbSizeActionPerformed
+
+    private void RectangRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RectangRellenoActionPerformed
+        modoR=1;
+        modo=5;
+    }//GEN-LAST:event_RectangRellenoActionPerformed
+
+    private void OvaloRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OvaloRellenoActionPerformed
+        modoR=2;
+        modo=5;
+    }//GEN-LAST:event_OvaloRellenoActionPerformed
+
+    private void ElipseRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ElipseRellenoActionPerformed
+        modoR=3;
+        modo=5;
+    }//GEN-LAST:event_ElipseRellenoActionPerformed
     
     //Metodo para redimensionar imagenes
     public ImageIcon redimension(String ImagePath) {
@@ -469,8 +527,32 @@ public class Interfaz extends javax.swing.JFrame {
                 Shape elipse = new Ellipse2D.Float(xInicial, yInicial, ancho, alto);
                 g2.draw(elipse);
                 break;
+            case 5:
+                break;
             default:
                 throw new AssertionError();
+        }
+    }
+    
+    public void relleno(Graphics g){//metodo para dibujar figuras con relleno
+        Graphics2D g2 = (Graphics2D) g; 
+        int ancho, alto;
+        ancho = xFinal - xInicial;
+        alto = yFinal - yInicial;
+        
+        switch(modoR){
+            case 0:
+                break;
+            case 1:
+                g2.fillRect(xInicial, yInicial, ancho, alto);
+                break;
+            case 2:
+                g2.fillOval(xInicial, yInicial, ancho, alto);
+                break;
+            case 3:
+                Shape elipse = new Ellipse2D.Float(xInicial, yInicial, ancho, alto);
+                g2.fill(elipse);                
+                break;
         }
     }
     
@@ -487,6 +569,8 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenuItem ArchivoGuardar;
     private javax.swing.JMenuItem ArchivoNuevo;
     private javax.swing.JButton BtnBorrar;
+    private javax.swing.JMenu ConRellenoMenu;
+    private javax.swing.JMenuItem ElipseRelleno;
     private javax.swing.JMenuItem FormaElipse;
     private javax.swing.JMenuItem FormaLinea;
     private javax.swing.JMenuItem FormaOvalo;
@@ -505,6 +589,9 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenu MenuTexto;
     private javax.swing.JMenuItem OpcColor;
     private javax.swing.JMenu OpcGrosor;
+    private javax.swing.JMenuItem OvaloRelleno;
+    private javax.swing.JMenuItem RectangRelleno;
+    private javax.swing.JMenu SinRellenoMenu;
     private javax.swing.JMenu SubMFuente;
     private javax.swing.JMenuItem TextoAgregar;
     private javax.swing.JComboBox<String> cbFont;

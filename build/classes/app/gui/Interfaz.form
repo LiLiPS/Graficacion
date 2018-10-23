@@ -39,38 +39,76 @@
             <Property name="text" type="java.lang.String" value="Formas"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="FormaLinea">
+            <Menu class="javax.swing.JMenu" name="SinRellenoMenu">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Linea"/>
+                <Property name="text" type="java.lang.String" value="Sin relleno"/>
               </Properties>
-              <Events>
-                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FormaLineaMousePressed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="FormaRectang">
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="FormaLinea">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Linea"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FormaLineaMousePressed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="FormaRectang">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Rectangulo"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FormaRectangMousePressed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="FormaOvalo">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Ovalo"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FormaOvaloMousePressed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="FormaElipse">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Elipse"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FormaElipseMousePressed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="ConRellenoMenu">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Rectangulo"/>
+                <Property name="text" type="java.lang.String" value="Con relleno"/>
               </Properties>
-              <Events>
-                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FormaRectangMousePressed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="FormaOvalo">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Ovalo"/>
-              </Properties>
-              <Events>
-                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FormaOvaloMousePressed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="FormaElipse">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Elipse"/>
-              </Properties>
-              <Events>
-                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FormaElipseMousePressed"/>
-              </Events>
-            </MenuItem>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="RectangRelleno">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Rect&#xe1;ngulo"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RectangRellenoActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="OvaloRelleno">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="&#xd3;valo"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="OvaloRellenoActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="ElipseRelleno">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Elipse"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ElipseRellenoActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="MenuTexto">
