@@ -45,6 +45,7 @@ public class Interfaz extends javax.swing.JFrame {
     private int modo = 0;
     private int modoR = 0;
     private int grosor = 0;
+    private Font fuente;
     
     public Interfaz() {
         initComponents();
@@ -71,6 +72,8 @@ public class Interfaz extends javax.swing.JFrame {
         cbFont = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         cbSize = new javax.swing.JComboBox<>();
+        Negrita = new javax.swing.JCheckBox();
+        Cursiva = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuArchivo = new javax.swing.JMenu();
         ArchivoNuevo = new javax.swing.JMenuItem();
@@ -127,7 +130,7 @@ public class Interfaz extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 296, Short.MAX_VALUE))
+                .addGap(0, 274, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -165,6 +168,28 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(cbSize);
+
+        Negrita.setText("Negrita");
+        Negrita.setFocusable(false);
+        Negrita.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Negrita.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Negrita.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                NegritaItemStateChanged(evt);
+            }
+        });
+        jToolBar1.add(Negrita);
+
+        Cursiva.setText("Cursiva");
+        Cursiva.setFocusable(false);
+        Cursiva.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Cursiva.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Cursiva.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                CursivaItemStateChanged(evt);
+            }
+        });
+        jToolBar1.add(Cursiva);
 
         getContentPane().add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
@@ -467,6 +492,48 @@ public class Interfaz extends javax.swing.JFrame {
         modoR=3;
         modo=5;
     }//GEN-LAST:event_ElipseRellenoActionPerformed
+
+    private void NegritaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_NegritaItemStateChanged
+        if(Negrita.isSelected() && Cursiva.isSelected()){
+        //cambie el texto a negrita y cursiva
+            fuente = new Font(cbFont.getSelectedItem().toString(),Font.BOLD|Font.ITALIC,
+                    Integer.parseInt(cbSize.getSelectedItem().toString()));
+            jTextPane1.setFont(fuente);
+        }else if (Negrita.isSelected()){
+              fuente = new Font(cbFont.getSelectedItem().toString(),Font.BOLD,
+                      Integer.parseInt(cbSize.getSelectedItem().toString()));		
+              jTextPane1.setFont(fuente);}
+        else if (Cursiva.isSelected()){ 
+            //Cambie el texto a cursiva
+                fuente = new Font(cbFont.getSelectedItem().toString(),Font.ITALIC,
+                        Integer.parseInt(cbSize.getSelectedItem().toString()));
+                jTextPane1.setFont(fuente);
+          }else{
+            fuente = new Font(cbFont.getSelectedItem().toString(),Font.PLAIN,
+                    Integer.parseInt(cbSize.getSelectedItem().toString()));
+            jTextPane1.setFont(fuente);}
+    }//GEN-LAST:event_NegritaItemStateChanged
+
+    private void CursivaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CursivaItemStateChanged
+            if(Negrita.isSelected() && Cursiva.isSelected()){
+            //cambie el texto a negrita y cursiva
+                    fuente = new Font(cbFont.getSelectedItem().toString(),Font.BOLD|Font.ITALIC,
+                            Integer.parseInt(cbSize.getSelectedItem().toString()));
+                    jTextPane1.setFont(fuente);
+            }else if (Cursiva.isSelected()){ 
+            //Cambie el texto a cursiva
+                fuente = new Font(cbFont.getSelectedItem().toString(),Font.ITALIC,
+                        Integer.parseInt(cbSize.getSelectedItem().toString()));
+                jTextPane1.setFont(fuente);
+            }else if (Negrita.isSelected()){
+              fuente = new Font(cbFont.getSelectedItem().toString(),Font.BOLD,
+                      Integer.parseInt(cbSize.getSelectedItem().toString()));		
+              jTextPane1.setFont(fuente);}
+            else{
+                fuente = new Font(cbFont.getSelectedItem().toString(),Font.PLAIN,
+                        Integer.parseInt(cbSize.getSelectedItem().toString()));
+                jTextPane1.setFont(fuente);}
+    }//GEN-LAST:event_CursivaItemStateChanged
     
     //Metodo para redimensionar imagenes
     public ImageIcon redimension(String ImagePath) {
@@ -570,6 +637,7 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenuItem ArchivoNuevo;
     private javax.swing.JButton BtnBorrar;
     private javax.swing.JMenu ConRellenoMenu;
+    private javax.swing.JCheckBox Cursiva;
     private javax.swing.JMenuItem ElipseRelleno;
     private javax.swing.JMenuItem FormaElipse;
     private javax.swing.JMenuItem FormaLinea;
@@ -587,6 +655,7 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenu MenuImagen;
     private javax.swing.JMenu MenuOpciones;
     private javax.swing.JMenu MenuTexto;
+    private javax.swing.JCheckBox Negrita;
     private javax.swing.JMenuItem OpcColor;
     private javax.swing.JMenu OpcGrosor;
     private javax.swing.JMenuItem OvaloRelleno;
