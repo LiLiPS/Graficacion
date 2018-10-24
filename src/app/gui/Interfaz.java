@@ -1,5 +1,6 @@
 package app.gui;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import javax.swing.ImageIcon;
@@ -8,7 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
  * @author Liliana Parada Sanchez
  * @author Flor Paulina Rodriguez Borja
  * @author Margarita del Carmen Sierra Muñoz
@@ -21,7 +21,17 @@ public class Interfaz extends javax.swing.JFrame {
     private int valor;
     private FileNameExtensionFilter filtro;
     private File archivoElegido;
-    JLabel label;
+    private JLabel label;
+    private int mouseX;
+    private int mouseY;
+    private int xInicial;
+    private int xFinal;
+    private int yInicial;
+    private int yFinal;
+    private int xpos[];
+    private int ypos[];
+    private boolean inicio = true;
+    private int modo = 0;
     
     public Interfaz() {
         initComponents();
@@ -68,6 +78,11 @@ public class Interfaz extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setPreferredSize(new java.awt.Dimension(300, 379));
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel1MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -83,6 +98,11 @@ public class Interfaz extends javax.swing.JFrame {
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         BtnBorrar.setText("Borrar");
+        BtnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBorrarActionPerformed(evt);
+            }
+        });
         getContentPane().add(BtnBorrar, java.awt.BorderLayout.SOUTH);
 
         MenuArchivo.setText("Archivo");
@@ -106,15 +126,35 @@ public class Interfaz extends javax.swing.JFrame {
         MenuFormas.setText("Formas");
 
         FormaLinea.setText("Linea");
+        FormaLinea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                FormaLineaMousePressed(evt);
+            }
+        });
         MenuFormas.add(FormaLinea);
 
         FormaRectang.setText("Rectangulo");
+        FormaRectang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                FormaRectangMousePressed(evt);
+            }
+        });
         MenuFormas.add(FormaRectang);
 
         FormaOvalo.setText("Ovalo");
+        FormaOvalo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                FormaOvaloMousePressed(evt);
+            }
+        });
         MenuFormas.add(FormaOvalo);
 
         FormaTriang.setText("Triangulo");
+        FormaTriang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                FormaTriangMousePressed(evt);
+            }
+        });
         MenuFormas.add(FormaTriang);
 
         jMenuBar1.add(MenuFormas);
@@ -202,6 +242,45 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ArchivoAbrirActionPerformed
     
+    private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
+        // TODO add your handling code here:
+        mouseX = evt.getX(); 
+        mouseY = evt.getY(); 
+        
+        Graphics g = this.jPanel1.getGraphics();
+        if (inicio){
+            xInicial = evt.getX();
+            yInicial = evt.getY();
+            inicio = false;
+        }else {
+            xFinal = evt.getX();
+            yFinal = evt.getY();
+            dibujaFigura(g);
+            inicio = true;
+        }
+    }//GEN-LAST:event_jPanel1MousePressed
+
+    private void FormaLineaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaLineaMousePressed
+        modo = 0;
+    }//GEN-LAST:event_FormaLineaMousePressed
+
+    private void FormaRectangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaRectangMousePressed
+        modo = 2;
+    }//GEN-LAST:event_FormaRectangMousePressed
+
+    private void FormaOvaloMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaOvaloMousePressed
+        modo = 1;
+    }//GEN-LAST:event_FormaOvaloMousePressed
+
+    private void FormaTriangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaTriangMousePressed
+        
+    }//GEN-LAST:event_FormaTriangMousePressed
+
+    private void BtnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBorrarActionPerformed
+        jPanel1.removeAll();
+        jPanel1.repaint();
+    }//GEN-LAST:event_BtnBorrarActionPerformed
+    
     //Metodo para redimensionar imagenes
     public ImageIcon redimension(String ImagePath) {
         ImageIcon MyImage = new ImageIcon(ImagePath);
@@ -210,6 +289,29 @@ public class Interfaz extends javax.swing.JFrame {
                         label.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(newImg);
         return image;
+    }
+    
+    public void dibujaFigura(Graphics g){
+        int ancho, alto;
+        ancho = xFinal - xInicial;
+        alto = yFinal - yInicial;
+        
+        switch (modo) {
+            case 0:
+                g.drawLine(xInicial, yInicial, xFinal, yFinal);
+                break;
+            case 1:
+                g.drawOval(xInicial, yInicial, ancho, alto);
+                break;
+            case 2:
+                g.drawRect(xInicial, yInicial, ancho, alto);
+                break; 
+            case 3:
+                getGraphics().drawLine( mouseX,mouseY,xFinal,yFinal); 
+                repaint();
+            default:
+                throw new AssertionError();
+        }
     }
     
     public static void main(String args[]) {
