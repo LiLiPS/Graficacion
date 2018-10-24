@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -42,6 +43,8 @@ public class Interfaz extends javax.swing.JFrame {
     private int xpos[];
     private int ypos[];
     private boolean inicio = true;
+    private boolean text = false;
+    private boolean fig = false;
     private int modo = 0;
     private int modoR = 0;
     private int grosor = 0;
@@ -64,8 +67,6 @@ public class Interfaz extends javax.swing.JFrame {
 
         fileChooser = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
         BtnBorrar = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         jLabel3 = new javax.swing.JLabel();
@@ -91,9 +92,6 @@ public class Interfaz extends javax.swing.JFrame {
         ElipseRelleno = new javax.swing.JMenuItem();
         MenuTexto = new javax.swing.JMenu();
         TextoAgregar = new javax.swing.JMenuItem();
-        SubMFuente = new javax.swing.JMenu();
-        FuenteTam = new javax.swing.JMenu();
-        FuenteTipo = new javax.swing.JMenu();
         MenuImagen = new javax.swing.JMenu();
         ImagenAgrega = new javax.swing.JMenuItem();
         MenuOpciones = new javax.swing.JMenu();
@@ -118,19 +116,15 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane2.setViewportView(jTextPane1);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
+            .addGap(0, 636, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 274, Short.MAX_VALUE))
+            .addGap(0, 372, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -287,17 +281,12 @@ public class Interfaz extends javax.swing.JFrame {
         MenuTexto.setText("Texto");
 
         TextoAgregar.setText("Agregar texto");
+        TextoAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextoAgregarActionPerformed(evt);
+            }
+        });
         MenuTexto.add(TextoAgregar);
-
-        SubMFuente.setText("Fuente");
-
-        FuenteTam.setText("Tamano");
-        SubMFuente.add(FuenteTam);
-
-        FuenteTipo.setText("Tipo");
-        SubMFuente.add(FuenteTipo);
-
-        MenuTexto.add(SubMFuente);
 
         jMenuBar1.add(MenuTexto);
 
@@ -406,37 +395,25 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ArchivoAbrirActionPerformed
     
-    private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
-        mouseX = evt.getX(); 
-        mouseY = evt.getY(); 
-        
-        Graphics g = this.jPanel1.getGraphics();
-        if (inicio){
-            xInicial = evt.getX();
-            yInicial = evt.getY();
-            inicio = false;
-        }else {
-            xFinal = evt.getX();
-            yFinal = evt.getY();
-            dibujaFigura(g);
-            relleno(g);
-            inicio = true;
-        }
-    }//GEN-LAST:event_jPanel1MousePressed
-
     private void FormaLineaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaLineaMousePressed
         modo = 0;
         modoR = 0;
+        fig = true; 
+        text = false;
     }//GEN-LAST:event_FormaLineaMousePressed
 
     private void FormaRectangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaRectangMousePressed
         modo = 2;
         modoR = 0;
+        fig = true;
+        text = false;
     }//GEN-LAST:event_FormaRectangMousePressed
 
     private void FormaOvaloMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaOvaloMousePressed
         modo = 1;
         modoR = 0;
+        fig = true;
+        text = false;
     }//GEN-LAST:event_FormaOvaloMousePressed
 
     private void FormaTriangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaTriangMousePressed
@@ -446,6 +423,8 @@ public class Interfaz extends javax.swing.JFrame {
     private void FormaElipseMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaElipseMousePressed
         modo = 4;
         modoR = 0;
+        fig = true;
+        text = false;
     }//GEN-LAST:event_FormaElipseMousePressed
 
     private void BtnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBorrarActionPerformed
@@ -455,11 +434,7 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void OpcColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpcColorActionPerformed
         //Abre en un cuadro de dialogo el color chooser y lo guarda
-        color = JColorChooser.showDialog(null, "Choose a Color", Color.BLUE);
-        
-        if (color !=null){
-            jTextPane1.setForeground(color);
-        }        
+        color = JColorChooser.showDialog(null, "Choose a Color", Color.BLUE);     
     }//GEN-LAST:event_OpcColorActionPerformed
 
     private void Grosor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor1ActionPerformed
@@ -495,77 +470,119 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_ArchivoNuevoActionPerformed
 
     private void cbFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFontActionPerformed
-        jTextPane1.setFont(new Font(cbFont.getSelectedItem().toString(),
-        Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString())));
+        fuente = new Font(cbFont.getSelectedItem().toString(),
+        Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString()));
     }//GEN-LAST:event_cbFontActionPerformed
 
     private void cbSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSizeActionPerformed
-       jTextPane1.setFont(new Font(cbFont.getSelectedItem().toString(),
-        Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString())));
+        fuente = new Font(cbFont.getSelectedItem().toString(),
+        Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString()));
     }//GEN-LAST:event_cbSizeActionPerformed
 
     private void RectangRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RectangRellenoActionPerformed
         modoR=1;
         modo=5;
+        fig = true;
+        text = false;
     }//GEN-LAST:event_RectangRellenoActionPerformed
 
     private void OvaloRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OvaloRellenoActionPerformed
         modoR=2;
         modo=5;
+        fig = true;
+        text = false;
     }//GEN-LAST:event_OvaloRellenoActionPerformed
 
     private void ElipseRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ElipseRellenoActionPerformed
         modoR=3;
         modo=5;
+        fig = true;
+        text = false;
     }//GEN-LAST:event_ElipseRellenoActionPerformed
 
     private void NegritaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_NegritaItemStateChanged
-        if(Negrita.isSelected() && Cursiva.isSelected()){
-        //cambie el texto a negrita y cursiva
+        if (Negrita.isSelected() && Cursiva.isSelected()) {
+            //cambie el texto a negrita y cursiva
             fuente = new Font(cbFont.getSelectedItem().toString(),
-                    Font.BOLD|Font.ITALIC,Integer.parseInt
-                                    (cbSize.getSelectedItem().toString()));
-            jTextPane1.setFont(fuente);
-        }else if (Negrita.isSelected()){
-              fuente = new Font(cbFont.getSelectedItem().toString(),Font.BOLD,
-                      Integer.parseInt(cbSize.getSelectedItem().toString()));		
-              jTextPane1.setFont(fuente);}
-        else if (Cursiva.isSelected()){ 
-            //Cambie el texto a cursiva
-                fuente = new Font(cbFont.getSelectedItem().toString(),
-                        Font.ITALIC,Integer.parseInt
-                            (cbSize.getSelectedItem().toString()));
-                jTextPane1.setFont(fuente);
-          }else{
-            fuente = new Font(cbFont.getSelectedItem().toString(),Font.PLAIN,
+                    Font.BOLD | Font.ITALIC,
                     Integer.parseInt(cbSize.getSelectedItem().toString()));
-            jTextPane1.setFont(fuente);}
+
+        } else if (Negrita.isSelected()) {
+            fuente = new Font(cbFont.getSelectedItem().toString(), Font.BOLD,
+                    Integer.parseInt(cbSize.getSelectedItem().toString()));
+        } else if (Cursiva.isSelected()) {
+            //Cambie el texto a cursiva
+            fuente = new Font(cbFont.getSelectedItem().toString(), Font.ITALIC,
+                    Integer.parseInt(cbSize.getSelectedItem().toString()));
+
+        } else {
+            fuente = new Font(cbFont.getSelectedItem().toString(), Font.PLAIN,
+                    Integer.parseInt(cbSize.getSelectedItem().toString()));
+        }
     }//GEN-LAST:event_NegritaItemStateChanged
 
     private void CursivaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CursivaItemStateChanged
-            if(Negrita.isSelected() && Cursiva.isSelected()){
+        if (Negrita.isSelected() && Cursiva.isSelected()) {
             //cambie el texto a negrita y cursiva
-                    fuente = new Font(cbFont.getSelectedItem().toString(),
-                            Font.BOLD|Font.ITALIC,Integer.parseInt
-                                        (cbSize.getSelectedItem().toString()));
-                    jTextPane1.setFont(fuente);
-            }else if (Cursiva.isSelected()){ 
+            fuente = new Font(cbFont.getSelectedItem().toString(),
+                    Font.BOLD | Font.ITALIC, 
+                    Integer.parseInt(cbSize.getSelectedItem().toString()));
+
+        } else if (Cursiva.isSelected()) {
             //Cambie el texto a cursiva
-                fuente = new Font(cbFont.getSelectedItem().toString(),
-                        Font.ITALIC,Integer.parseInt
-                            (cbSize.getSelectedItem().toString()));
-                jTextPane1.setFont(fuente);
-            }else if (Negrita.isSelected()){
-              fuente = new Font(cbFont.getSelectedItem().toString(),Font.BOLD,
-                      Integer.parseInt(cbSize.getSelectedItem().toString()));		
-              jTextPane1.setFont(fuente);}
-            else{
-                fuente = new Font(cbFont.getSelectedItem().toString(),
-                        Font.PLAIN,Integer.parseInt
-                            (cbSize.getSelectedItem().toString()));
-                jTextPane1.setFont(fuente);}
+            fuente = new Font(cbFont.getSelectedItem().toString(), Font.ITALIC, 
+                    Integer.parseInt(cbSize.getSelectedItem().toString()));
+
+        } else if (Negrita.isSelected()) {
+            fuente = new Font(cbFont.getSelectedItem().toString(), Font.BOLD,
+                    Integer.parseInt(cbSize.getSelectedItem().toString()));
+        } else {
+            fuente = new Font(cbFont.getSelectedItem().toString(),Font.PLAIN, 
+                    Integer.parseInt(cbSize.getSelectedItem().toString()));
+        }
     }//GEN-LAST:event_CursivaItemStateChanged
+
+    private void TextoAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextoAgregarActionPerformed
+        // TODO add your handling code here:
+        text = true;
+        fig = false;
+    }//GEN-LAST:event_TextoAgregarActionPerformed
+
+    private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
+        mouseX = evt.getX();
+        mouseY = evt.getY();
+
+        Graphics g = this.jPanel1.getGraphics();
+        escribirTexto(g);
+        if (fig == true) {
+            if (inicio) {
+                xInicial = evt.getX();
+                yInicial = evt.getY();
+                inicio = false;
+            } else {
+                xFinal = evt.getX();
+                yFinal = evt.getY();
+                dibujaFigura(g);
+                relleno(g);
+                inicio = true;
+            }
+        }
+    }//GEN-LAST:event_jPanel1MousePressed
     
+    public void escribirTexto(Graphics g){
+        String texto;
+
+        Graphics2D gText = (Graphics2D) g;
+        
+        if(text == true){
+            texto = JOptionPane.showInputDialog("");
+            if(texto != null){
+                gText.setFont(fuente);
+                gText.setColor(color);
+                gText.drawString(texto, mouseX, mouseY);
+            }
+        }
+    }
     //Metodo para redimensionar imagenes
     public ImageIcon redimension(String ImagePath) {
         ImageIcon MyImage = new ImageIcon(ImagePath);
@@ -585,8 +602,8 @@ public class Interfaz extends javax.swing.JFrame {
         ComboBoxModel model = new DefaultComboBoxModel(fontNames);
         cbFont.setModel(model);
     }
-    
-    public void dibujaFigura(Graphics g){
+
+    public void dibujaFigura(Graphics g) {
         //Convierte Graphics a Graphics2D para poder cambiar grosor
         Graphics2D g2 = (Graphics2D) g;
         int ancho, alto;
@@ -595,10 +612,10 @@ public class Interfaz extends javax.swing.JFrame {
 
         //Pone el color seleccionado en el color chooser
         g.setColor(color);
-        
+
         //Segun el RadioButton elegido cambia el grosor de linea
-        switch(grosor){
-            case 0: 
+        switch (grosor) {
+            case 0:
                 g2.setStroke(new BasicStroke(1));
                 break;
             case 1:
@@ -611,53 +628,57 @@ public class Interfaz extends javax.swing.JFrame {
                 g2.setStroke(new BasicStroke(4));
                 break;
         }
-        
-        switch (modo) {
-            case 0:
-                g2.drawLine(xInicial, yInicial, xFinal, yFinal);
-                break;
-            case 1:
-                g2.drawOval(xInicial, yInicial, ancho, alto);
-                break;
-            case 2:
-                g2.drawRect(xInicial, yInicial, ancho, alto);
-                break;
-            case 3:
-                getGraphics().drawLine(mouseX, mouseY, xFinal, yFinal);
-                repaint();
-            case 4:
-                Shape elipse = new Ellipse2D.Float(xInicial, yInicial, ancho, 
-                                                    alto);
-                g2.draw(elipse);
-                break;
-            case 5:
-                break;
-            default:
-                throw new AssertionError();
+
+        if (fig == true) {
+            switch (modo) {
+                case 0:
+                    g2.drawLine(xInicial, yInicial, xFinal, yFinal);
+                    break;
+                case 1:
+                    g2.drawOval(xInicial, yInicial, ancho, alto);
+                    break;
+                case 2:
+                    g2.drawRect(xInicial, yInicial, ancho, alto);
+                    break;
+                case 3:
+                    getGraphics().drawLine(mouseX, mouseY, xFinal, yFinal);
+                    repaint();
+                case 4:
+                    Shape elipse = new Ellipse2D.Float(xInicial, yInicial, ancho,
+                            alto);
+                    g2.draw(elipse);
+                    break;
+                case 5:
+                    break;
+                default:
+                    throw new AssertionError();
+            }
         }
     }
     
     //metodo para dibujar figuras con relleno
-    public void relleno(Graphics g){
-        Graphics2D g2 = (Graphics2D) g; 
+    public void relleno(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
         int ancho, alto;
         ancho = xFinal - xInicial;
         alto = yFinal - yInicial;
-        
-        switch(modoR){
-            case 0:
-                break;
-            case 1:
-                g2.fillRect(xInicial, yInicial, ancho, alto);
-                break;
-            case 2:
-                g2.fillOval(xInicial, yInicial, ancho, alto);
-                break;
-            case 3:
-                Shape elipse = new Ellipse2D.Float(xInicial, yInicial, ancho, 
-                                                    alto);
-                g2.fill(elipse);                
-                break;
+
+        if (fig == true) {
+            switch (modoR) {
+                case 0:
+                    break;
+                case 1:
+                    g2.fillRect(xInicial, yInicial, ancho, alto);
+                    break;
+                case 2:
+                    g2.fillOval(xInicial, yInicial, ancho, alto);
+                    break;
+                case 3:
+                    Shape elipse = new Ellipse2D.Float(xInicial, yInicial, ancho,
+                            alto);
+                    g2.fill(elipse);
+                    break;
+            }
         }
     }
     
@@ -681,8 +702,6 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenuItem FormaLinea;
     private javax.swing.JMenuItem FormaOvalo;
     private javax.swing.JMenuItem FormaRectang;
-    private javax.swing.JMenu FuenteTam;
-    private javax.swing.JMenu FuenteTipo;
     private javax.swing.JRadioButtonMenuItem Grosor1;
     private javax.swing.JRadioButtonMenuItem Grosor2;
     private javax.swing.JRadioButtonMenuItem Grosor3;
@@ -699,7 +718,6 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenuItem OvaloRelleno;
     private javax.swing.JMenuItem RectangRelleno;
     private javax.swing.JMenu SinRellenoMenu;
-    private javax.swing.JMenu SubMFuente;
     private javax.swing.JMenuItem TextoAgregar;
     private javax.swing.JComboBox<String> cbFont;
     private javax.swing.JComboBox<String> cbSize;
@@ -708,8 +726,6 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }
