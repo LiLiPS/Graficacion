@@ -1,10 +1,6 @@
 package app.gui;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -15,7 +11,6 @@ import java.awt.Image;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,44 +33,35 @@ import org.json.simple.parser.JSONParser;
  * @author Margarita del Carmen Sierra Muñoz
  * @author Arantxa Patricia Ibarra Muñoz
  */
-
 public class Interfaz extends javax.swing.JFrame {
     //Variables Globales
     private String descripcion, path;
-    private int valor;
+    private int valor, mouseX, mouseY, xInicial, xFinal, yInicial, yFinal, modo;
+    private int grosor, rojo, verde, azul;
     private FileNameExtensionFilter filtro;
     private File archivoElegido;
     private JLabel label;
     private Color color;
-    private int mouseX;
-    private int mouseY;
-    private int xInicial;
-    private int xFinal;
-    private int yInicial;
-    private int yFinal;
-    private int xpos[];
-    private int ypos[];
-    private boolean inicio = true;
-    private boolean text = false;
-    private boolean fig = false;
-    private int modo = 0;
-    private int modoR = 0;
-    private int grosor = 0;
+    private boolean inicio, text, fig;
     private Font fuente;
-    private int index;
     private JSONArray jsonArray;
-    private Gson gson;
+    private JOptionPane j;
     
     public Interfaz() {
         initComponents();
-        this.jsonArray = new JSONArray();
-        this.index = 0;
-        this.gson = new Gson();
-        jPanel1.setVisible(true);//Se mostrara al dar clic en 'nuevo'
-        //Acomodo JFrame
+        //Inicializacion variables globales
+        modo = 0;
+        grosor = 0;
+        inicio = true;
+        text = false;
+        fig = false;
+        jsonArray = new JSONArray();
+        //Acomodo componentes
         this.setResizable(false);
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
+        jPanel1.setVisible(true);
+        //Llamada a metodos
         loadFont(); 
     }
 
@@ -95,7 +81,6 @@ public class Interfaz extends javax.swing.JFrame {
         Cursiva = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuArchivo = new javax.swing.JMenu();
-        ArchivoNuevo = new javax.swing.JMenuItem();
         ArchivoAbrir = new javax.swing.JMenuItem();
         ArchivoGuardar = new javax.swing.JMenuItem();
         MenuFormas = new javax.swing.JMenu();
@@ -138,7 +123,7 @@ public class Interfaz extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 636, Short.MAX_VALUE)
+            .addGap(0, 637, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,14 +192,6 @@ public class Interfaz extends javax.swing.JFrame {
 
         MenuArchivo.setText("Archivo");
 
-        ArchivoNuevo.setText("Nuevo");
-        ArchivoNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ArchivoNuevoActionPerformed(evt);
-            }
-        });
-        MenuArchivo.add(ArchivoNuevo);
-
         ArchivoAbrir.setText("Abrir");
         ArchivoAbrir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -224,11 +201,6 @@ public class Interfaz extends javax.swing.JFrame {
         MenuArchivo.add(ArchivoAbrir);
 
         ArchivoGuardar.setText("Guardar");
-        ArchivoGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ArchivoGuardarMouseClicked(evt);
-            }
-        });
         ArchivoGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ArchivoGuardarActionPerformed(evt);
@@ -384,7 +356,6 @@ public class Interfaz extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    //Evento para abrir FileChooser desde MenuItem y subir imagen
     private void ImagenAgregaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImagenAgregaActionPerformed
         descripcion = "*.Imagenes";
         filtro = new FileNameExtensionFilter(descripcion,
@@ -406,9 +377,8 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ImagenAgregaActionPerformed
 
-    //Evento para abrir FileChooser desde MenuItem y leer archivo de grafico
     private void ArchivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoAbrirActionPerformed
-        descripcion = "*.txt";
+        descripcion = "*.Grafico";
         filtro = new FileNameExtensionFilter(descripcion,
                 "graf");
         fileChooser.addChoosableFileFilter(filtro);
@@ -419,24 +389,29 @@ public class Interfaz extends javax.swing.JFrame {
             System.out.println(archivoElegido);
             try {
                 JSONParser parse = new JSONParser();
-                String data = new String (Files.readAllBytes(Paths.get(archivoElegido.getAbsolutePath())));
+                String data = new String (Files.readAllBytes(Paths.get
+                                        (archivoElegido.getAbsolutePath())));
                 System.out.println(data);
                 Object obj = parse.parse(data);
                 JSONObject newJson = (JSONObject) obj;
                 JSONArray jsonArrayNew = (JSONArray) newJson.get("data");
-                Graphics g = this.jPanel1.getGraphics();
+                Graphics g = jPanel1.getGraphics();
                 Graphics2D g2 = (Graphics2D) g;
                 for(int i = 0; i < jsonArrayNew.size(); i++) {
                     JSONObject json = (JSONObject) jsonArrayNew.get(i);
-                    this.modo = 0;
-                    this.color = new Color(0,0,0);
-                    this.fig = true;
-                    this.xInicial = Integer.parseInt(json.get("xInicial").toString());
-                    this.yFinal = Integer.parseInt(json.get("yFinal").toString());
-                    this.yInicial = Integer.parseInt(json.get("yInicial").toString());
-                    this.xFinal = Integer.parseInt(json.get("xFinal").toString());
-                    
-                    this.dibujaFigura(g);
+                    modo = Integer.parseInt(json.get("Modo").toString());
+                    rojo = Integer.parseInt(json.get("Rojo").toString());
+                    verde = Integer.parseInt(json.get("Verde").toString());
+                    azul = Integer.parseInt(json.get("Azul").toString());
+                    color = new Color(rojo, verde, azul);
+                    fig = true;
+                    xInicial = Integer.parseInt(json.get("xInicial").
+                                toString());
+                    xFinal = Integer.parseInt(json.get("xFinal").toString());
+                    yInicial = Integer.parseInt(json.get("yInicial").
+                                toString());
+                    yFinal = Integer.parseInt(json.get("yFinal").toString());
+                    dibujaFigura(g);
                 }
             } catch(Exception e) {
                 System.err.println("Error lectura archivo:" + e);
@@ -446,40 +421,37 @@ public class Interfaz extends javax.swing.JFrame {
     
     private void FormaLineaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaLineaMousePressed
         modo = 0;
-        modoR = 0;
-        fig = true; 
+        fig = true;
         text = false;
     }//GEN-LAST:event_FormaLineaMousePressed
 
     private void FormaRectangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaRectangMousePressed
         modo = 2;
-        modoR = 0;
         fig = true;
         text = false;
     }//GEN-LAST:event_FormaRectangMousePressed
 
     private void FormaOvaloMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaOvaloMousePressed
         modo = 1;
-        modoR = 0;
         fig = true;
         text = false;
     }//GEN-LAST:event_FormaOvaloMousePressed
 
+    //Eliminar
     private void FormaTriangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaTriangMousePressed
         
     }//GEN-LAST:event_FormaTriangMousePressed
     
     private void FormaElipseMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaElipseMousePressed
-        modo = 4;
-        modoR = 0;
+        modo = 3;
         fig = true;
         text = false;
     }//GEN-LAST:event_FormaElipseMousePressed
 
     private void BtnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBorrarActionPerformed
-       // jPanel1.removeAll();
+       jPanel1.removeAll();
        jsonArray = new JSONArray();
-        jPanel1.repaint();     
+       jPanel1.repaint();     
     }//GEN-LAST:event_BtnBorrarActionPerformed
 
     private void OpcColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpcColorActionPerformed
@@ -515,10 +487,6 @@ public class Interfaz extends javax.swing.JFrame {
         Grosor3.setSelected(false);
     }//GEN-LAST:event_Grosor4ActionPerformed
 
-    private void ArchivoNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoNuevoActionPerformed
-        jPanel1.setVisible(true);
-    }//GEN-LAST:event_ArchivoNuevoActionPerformed
-
     private void cbFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFontActionPerformed
         fuente = new Font(cbFont.getSelectedItem().toString(),
         Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString()));
@@ -530,22 +498,19 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_cbSizeActionPerformed
 
     private void RectangRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RectangRellenoActionPerformed
-        modoR=1;
-        modo=5;
+        modo = 4;
         fig = true;
         text = false;
     }//GEN-LAST:event_RectangRellenoActionPerformed
 
     private void OvaloRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OvaloRellenoActionPerformed
-        modoR=2;
-        modo=5;
+        modo = 5;
         fig = true;
         text = false;
     }//GEN-LAST:event_OvaloRellenoActionPerformed
 
     private void ElipseRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ElipseRellenoActionPerformed
-        modoR=3;
-        modo=5;
+        modo = 6;
         fig = true;
         text = false;
     }//GEN-LAST:event_ElipseRellenoActionPerformed
@@ -593,16 +558,15 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_CursivaItemStateChanged
 
     private void TextoAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextoAgregarActionPerformed
-        // TODO add your handling code here:
-        text = true;
         fig = false;
+        text = true;
     }//GEN-LAST:event_TextoAgregarActionPerformed
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
         mouseX = evt.getX();
         mouseY = evt.getY();
 
-        Graphics g = this.jPanel1.getGraphics();
+        Graphics g = jPanel1.getGraphics();
         escribirTexto(g);
         if (fig == true) {
             if (inicio) {
@@ -613,30 +577,32 @@ public class Interfaz extends javax.swing.JFrame {
                 xFinal = evt.getX();
                 yFinal = evt.getY();
                 dibujaFigura(g);
-                relleno(g);
                 inicio = true;
             }
         }
     }//GEN-LAST:event_jPanel1MousePressed
 
-    private void ArchivoGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ArchivoGuardarMouseClicked
-
-    }//GEN-LAST:event_ArchivoGuardarMouseClicked
-
     private void ArchivoGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoGuardarActionPerformed
-        for(int i = 0; i < jsonArray.size(); i++) {
-            JSONObject json = (JSONObject) jsonArray.get(i);
-            System.out.println(json);
-        }
-        try {
-            JSONObject finalJson = new JSONObject();
-            finalJson.put("data", jsonArray);
-            FileWriter fileNew = new FileWriter("C:\\Users\\fj-go\\Desktop\\Graficacion\\troncaFile\\tronca.txt");
-            fileNew.write(finalJson.toString());
-            fileNew.flush();
-            fileNew.close();
-        } catch(JsonIOException | IOException e) {
-            System.err.println(e);
+        int save;
+        
+        fileChooser.setCurrentDirectory(new File("C:\\"));
+        save = fileChooser.showSaveDialog(null);
+        if (save == JFileChooser.APPROVE_OPTION) {
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject json = (JSONObject) jsonArray.get(i);
+                System.out.println(json);
+            }
+            try {
+                JSONObject finalJ = new JSONObject();
+                finalJ.put("data", jsonArray);
+                FileWriter fw = new FileWriter(fileChooser.getSelectedFile() + 
+                                                ".graf");
+                fw.write(finalJ.toString());
+                fw.flush();
+                fw.close();
+            } catch (JsonIOException | IOException e) {
+                j.showMessageDialog(null, e);
+            }
         }
     }//GEN-LAST:event_ArchivoGuardarActionPerformed
     
@@ -649,12 +615,19 @@ public class Interfaz extends javax.swing.JFrame {
             texto = JOptionPane.showInputDialog("");
             if(texto != null){
                 gText.setFont(fuente);
+                if(color == null){
+                    color = new Color(0, 0, 0);
+                }
                 gText.setColor(color);
+                rojo = color.getRed();
+                verde = color.getGreen();
+                azul = color.getBlue();
                 gText.drawString(texto, mouseX, mouseY);
+                saveJson(modo, mouseX, mouseY, 0, 0, rojo, verde, azul, gText);
             }
         }
     }
-    //Metodo para redimensionar imagenes
+    
     public ImageIcon redimension(String ImagePath) {
         ImageIcon MyImage = new ImageIcon(ImagePath);
         Image img = MyImage.getImage();
@@ -677,12 +650,22 @@ public class Interfaz extends javax.swing.JFrame {
     public void dibujaFigura(Graphics g) {
         //Convierte Graphics a Graphics2D para poder cambiar grosor
         Graphics2D g2 = (Graphics2D) g;
+        Shape elipse;
         int ancho, alto;
+        
         ancho = xFinal - xInicial;
         alto = yFinal - yInicial;
-
-        //Pone el color seleccionado en el color chooser
+        
+        //Si no escogen color, el predeterminado es negro
+        if(color == null){
+            color = new Color(0, 0, 0);
+        }
+        //Pone el color seleccionado del ColorChooser
         g.setColor(color);
+        //Obtiene colores para redibujar
+        rojo = color.getRed();
+        verde = color.getGreen();
+        azul = color.getBlue();
 
         //Segun el RadioButton elegido cambia el grosor de linea
         switch (grosor) {
@@ -704,26 +687,42 @@ public class Interfaz extends javax.swing.JFrame {
             switch (modo) {
                 case 0:
                     g2.drawLine(xInicial, yInicial, xFinal, yFinal);
-                    this.saveJson(modo, xInicial, yInicial, xFinal, yFinal, g2);
+                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, rojo,
+                            verde, azul, g2);
                     break;
                 case 1:
                     g2.drawOval(xInicial, yInicial, ancho, alto);
-                    this.saveJson(modo, xInicial, yInicial, ancho, alto, g2);
+                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, 
+                            alto, rojo, verde, azul, g2);
                     break;
                 case 2:
                     g2.drawRect(xInicial, yInicial, ancho, alto);
-                    this.saveJson(modo, xInicial, yInicial, ancho, alto, g2);
+                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, 
+                            alto, rojo, verde, azul, g2);
                     break;
                 case 3:
-                    getGraphics().drawLine(mouseX, mouseY, xFinal, yFinal);
-                    this.saveJson(modo, xInicial, yInicial, xFinal, yFinal, g2);
-                    repaint();
-                case 4:
-                    Shape elipse = new Ellipse2D.Float(xInicial, yInicial, ancho,
+                    elipse = new Ellipse2D.Float(xInicial, yInicial, ancho,
                             alto);
                     g2.draw(elipse);
+                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho,
+                            alto, rojo, verde, azul, g2);
+                    break;
+                case 4:
+                    g2.fillRect(xInicial, yInicial, ancho, alto);
+                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho,
+                            alto, rojo, verde, azul, g2);
                     break;
                 case 5:
+                    g2.fillOval(xInicial, yInicial, ancho, alto);
+                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho,
+                            alto, rojo, verde, azul, g2);
+                    break;
+                case 6:
+                    elipse = new Ellipse2D.Float(xInicial, yInicial, ancho,
+                            alto);
+                    g2.fill(elipse);
+                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho,
+                            alto, rojo, verde, azul, g2);
                     break;
                 default:
                     throw new AssertionError();
@@ -731,42 +730,38 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }
     
-    private void saveJson(int type, int xInicial, int yInicial, 
-            int xFinal, int yFinal, Graphics2D style) {
+    private void saveJson(int modo, int xInicial, int yInicial, 
+            int xFinal, int yFinal, int rojo, int verde, int azul,
+            Graphics2D g2) {
         JSONObject json = new JSONObject();
-        json.put("Type", type);
-        //json.put("Style", style);
+        
+        json.put("Modo", modo);
         json.put("xInicial" ,xInicial);
         json.put("yInicial", yInicial);
         json.put("xFinal", xFinal);
         json.put("yFinal", yFinal);
+        json.put("Rojo", rojo);
+        json.put("Verde", verde);
+        json.put("Azul", azul);
         jsonArray.add(json);
     }
     
-    //metodo para dibujar figuras con relleno
-    public void relleno(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        int ancho, alto;
-        ancho = xFinal - xInicial;
-        alto = yFinal - yInicial;
-
-        if (fig == true) {
-            switch (modoR) {
-                case 0:
-                    break;
-                case 1:
-                    g2.fillRect(xInicial, yInicial, ancho, alto);
-                    break;
-                case 2:
-                    g2.fillOval(xInicial, yInicial, ancho, alto);
-                    break;
-                case 3:
-                    Shape elipse = new Ellipse2D.Float(xInicial, yInicial, ancho,
-                            alto);
-                    g2.fill(elipse);
-                    break;
-            }
-        }
+    private void saveJson(int modo, int xInicial, int yInicial, 
+            int xFinal, int yFinal, int ancho, int alto, int rojo, int verde, int azul,
+            Graphics2D g2) {
+        JSONObject json = new JSONObject();
+        
+        json.put("Modo", modo);
+        json.put("xInicial" ,xInicial);
+        json.put("yInicial", yInicial);
+        json.put("xFinal", xFinal);
+        json.put("yFinal", yFinal);
+        json.put("Ancho", ancho);
+        json.put("Alto", alto);
+        json.put("Rojo", rojo);
+        json.put("Verde", verde);
+        json.put("Azul", azul);
+        jsonArray.add(json);
     }
     
     public static void main(String args[]) {
@@ -780,7 +775,6 @@ public class Interfaz extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem ArchivoAbrir;
     private javax.swing.JMenuItem ArchivoGuardar;
-    private javax.swing.JMenuItem ArchivoNuevo;
     private javax.swing.JButton BtnBorrar;
     private javax.swing.JMenu ConRellenoMenu;
     private javax.swing.JCheckBox Cursiva;
