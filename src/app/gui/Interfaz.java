@@ -35,9 +35,9 @@ import org.json.simple.parser.JSONParser;
  */
 public class Interfaz extends javax.swing.JFrame {
     //Variables Globales
-    private String descripcion, path;
+    private String descripcion, path, texto, familia;
     private int valor, mouseX, mouseY, xInicial, xFinal, yInicial, yFinal, modo;
-    private int grosor, rojo, verde, azul;
+    private int grosor, rojo, verde, azul, estilo, size;
     private FileNameExtensionFilter filtro;
     private File archivoElegido;
     private JLabel label;
@@ -387,7 +387,7 @@ public class Interfaz extends javax.swing.JFrame {
         if (valor == JFileChooser.APPROVE_OPTION) {
             archivoElegido = fileChooser.getSelectedFile();
             System.out.println(archivoElegido);
-            try {
+           try {
                 JSONParser parse = new JSONParser();
                 String data = new String (Files.readAllBytes(Paths.get
                                         (archivoElegido.getAbsolutePath())));
@@ -395,7 +395,7 @@ public class Interfaz extends javax.swing.JFrame {
                 Object obj = parse.parse(data);
                 JSONObject newJson = (JSONObject) obj;
                 JSONArray jsonArrayNew = (JSONArray) newJson.get("data");
-                Graphics g = jPanel1.getGraphics();
+                Graphics g = getGraphics();
                 Graphics2D g2 = (Graphics2D) g;
                 for(int i = 0; i < jsonArrayNew.size(); i++) {
                     JSONObject json = (JSONObject) jsonArrayNew.get(i);
@@ -404,13 +404,20 @@ public class Interfaz extends javax.swing.JFrame {
                     verde = Integer.parseInt(json.get("Verde").toString());
                     azul = Integer.parseInt(json.get("Azul").toString());
                     color = new Color(rojo, verde, azul);
-                    fig = true;
+                    grosor = Integer.parseInt(json.get("Grosor").toString());
                     xInicial = Integer.parseInt(json.get("xInicial").
                                 toString());
                     xFinal = Integer.parseInt(json.get("xFinal").toString());
                     yInicial = Integer.parseInt(json.get("yInicial").
                                 toString());
                     yFinal = Integer.parseInt(json.get("yFinal").toString());
+                    mouseX = Integer.parseInt(json.get("MouseX").toString());
+                    mouseY = Integer.parseInt(json.get("MouseY").toString());
+                    texto = json.get("Texto").toString();
+                    familia = json.get("Familia").toString();
+                    estilo = Integer.parseInt(json.get("Estilo").toString());
+                    size = Integer.parseInt(json.get("Size").toString());
+                    fuente = new Font(familia, estilo, size);
                     dibujaFigura(g);
                 }
             } catch(Exception e) {
@@ -559,6 +566,7 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void TextoAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextoAgregarActionPerformed
         fig = false;
+        modo = 7;
         text = true;
     }//GEN-LAST:event_TextoAgregarActionPerformed
 
@@ -607,14 +615,19 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_ArchivoGuardarActionPerformed
     
     public void escribirTexto(Graphics g){
-        String texto;
-
         Graphics2D gText = (Graphics2D) g;
         
         if(text == true){
             texto = JOptionPane.showInputDialog("");
             if(texto != null){
+                if (fuente == null){
+                    fuente = new Font("Arial", Font.PLAIN, 12);
+                }
                 gText.setFont(fuente);
+                //Obtiene parametros de la fuente
+                familia = fuente.getFamily();
+                estilo = fuente.getStyle();
+                size = fuente.getSize();
                 if(color == null){
                     color = new Color(0, 0, 0);
                 }
@@ -623,8 +636,19 @@ public class Interfaz extends javax.swing.JFrame {
                 verde = color.getGreen();
                 azul = color.getBlue();
                 gText.drawString(texto, mouseX, mouseY);
-                saveJson(modo, mouseX, mouseY, 0, 0, rojo, verde, azul, gText);
+                saveJson(modo, texto, mouseX, mouseY, rojo, verde, azul,
+                        familia, estilo, size, gText);
             }
+        }
+    }
+    
+    public void desplegarTexto(Graphics g){
+        Graphics2D gText = (Graphics2D) g;
+        
+        if(texto != null){
+            gText.setFont(fuente);
+            gText.setColor(color);
+            gText.drawString(texto, mouseX, mouseY);
         }
     }
     
@@ -660,7 +684,6 @@ public class Interfaz extends javax.swing.JFrame {
         if(color == null){
             color = new Color(0, 0, 0);
         }
-        //Pone el color seleccionado del ColorChooser
         g.setColor(color);
         //Obtiene colores para redibujar
         rojo = color.getRed();
@@ -682,56 +705,59 @@ public class Interfaz extends javax.swing.JFrame {
                 g2.setStroke(new BasicStroke(4));
                 break;
         }
-
-        if (fig == true) {
-            switch (modo) {
-                case 0:
-                    g2.drawLine(xInicial, yInicial, xFinal, yFinal);
-                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, rojo,
-                            verde, azul, g2);
-                    break;
-                case 1:
-                    g2.drawOval(xInicial, yInicial, ancho, alto);
-                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, 
-                            alto, rojo, verde, azul, g2);
-                    break;
-                case 2:
-                    g2.drawRect(xInicial, yInicial, ancho, alto);
-                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, 
-                            alto, rojo, verde, azul, g2);
-                    break;
-                case 3:
-                    elipse = new Ellipse2D.Float(xInicial, yInicial, ancho,
-                            alto);
-                    g2.draw(elipse);
-                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho,
-                            alto, rojo, verde, azul, g2);
-                    break;
-                case 4:
-                    g2.fillRect(xInicial, yInicial, ancho, alto);
-                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho,
-                            alto, rojo, verde, azul, g2);
-                    break;
-                case 5:
-                    g2.fillOval(xInicial, yInicial, ancho, alto);
-                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho,
-                            alto, rojo, verde, azul, g2);
-                    break;
-                case 6:
-                    elipse = new Ellipse2D.Float(xInicial, yInicial, ancho,
-                            alto);
-                    g2.fill(elipse);
-                    saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho,
-                            alto, rojo, verde, azul, g2);
-                    break;
-                default:
-                    throw new AssertionError();
-            }
+        
+        switch (modo) {
+            case 0:
+                g2.drawLine(xInicial, yInicial, xFinal, yFinal);
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, rojo, verde,
+                        azul, grosor, g2);
+                break;
+            case 1:
+                g2.drawOval(xInicial, yInicial, ancho, alto);
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto, 
+                        rojo, verde, azul, grosor, g2);
+                break;
+            case 2:
+                g2.drawRect(xInicial, yInicial, ancho, alto);
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto, 
+                        rojo, verde, azul, grosor, g2);
+                break;
+            case 3:
+                elipse = new Ellipse2D.Float(xInicial, yInicial, ancho, alto);
+                g2.draw(elipse);
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto, 
+                        rojo, verde, azul, grosor, g2);
+                break;
+            case 4:
+                g2.fillRect(xInicial, yInicial, ancho, alto);
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto,
+                        rojo, verde, azul, grosor, g2);
+                break;
+            case 5:
+                g2.fillOval(xInicial, yInicial, ancho, alto);
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto, 
+                        rojo, verde, azul, grosor, g2);
+                break;
+            case 6:
+                elipse = new Ellipse2D.Float(xInicial, yInicial, ancho, alto);
+                g2.fill(elipse);
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto,
+                        rojo, verde, azul, grosor, g2);
+                break;
+            case 7:
+                if (texto.isEmpty()){
+                    escribirTexto(g);
+                } else {
+                    desplegarTexto(g);
+                }
+                break;
+            default:
+                throw new AssertionError();
         }
     }
     
     private void saveJson(int modo, int xInicial, int yInicial, 
-            int xFinal, int yFinal, int rojo, int verde, int azul,
+            int xFinal, int yFinal, int rojo, int verde, int azul, int grosor,
             Graphics2D g2) {
         JSONObject json = new JSONObject();
         
@@ -743,12 +769,13 @@ public class Interfaz extends javax.swing.JFrame {
         json.put("Rojo", rojo);
         json.put("Verde", verde);
         json.put("Azul", azul);
+        json.put("Grosor", grosor);
         jsonArray.add(json);
     }
     
     private void saveJson(int modo, int xInicial, int yInicial, 
-            int xFinal, int yFinal, int ancho, int alto, int rojo, int verde, int azul,
-            Graphics2D g2) {
+            int xFinal, int yFinal, int ancho, int alto, int rojo, int verde, 
+            int azul, int grosor, Graphics2D g2) {
         JSONObject json = new JSONObject();
         
         json.put("Modo", modo);
@@ -761,6 +788,25 @@ public class Interfaz extends javax.swing.JFrame {
         json.put("Rojo", rojo);
         json.put("Verde", verde);
         json.put("Azul", azul);
+        json.put("Grosor", grosor);
+        jsonArray.add(json);
+    }
+    
+    private void saveJson(int modo, String texto, int mouseX, int mouseY,
+            int rojo, int verde, int azul, String familia, int estilo, int size,
+            Graphics2D g2){
+        JSONObject json = new JSONObject();
+        
+        json.put("Modo", modo);
+        json.put("Texto", texto);
+        json.put("MouseX" ,mouseX);
+        json.put("MouseY", mouseY);
+        json.put("Rojo", rojo);
+        json.put("Verde", verde);
+        json.put("Azul", azul);
+        json.put("Familia", familia);
+        json.put("Estilo", estilo);
+        json.put("Size", size);
         jsonArray.add(json);
     }
     
