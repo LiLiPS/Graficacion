@@ -20,6 +20,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -46,6 +47,7 @@ public class Interfaz extends javax.swing.JFrame {
     private Font fuente;
     private JSONArray jsonArray;
     private JOptionPane j;
+    private final JFrame frame;
     
     public Interfaz() {
         initComponents();
@@ -56,6 +58,10 @@ public class Interfaz extends javax.swing.JFrame {
         text = false;
         fig = false;
         jsonArray = new JSONArray();
+        frame = new JFrame();
+        frame.add(this.jToolBar1);
+        this.jToolBar1.setSize(700, 41);
+        frame.setSize(800, 100);
         //Acomodo componentes
         this.setResizable(false);
         this.setSize(1000, 700);
@@ -70,8 +76,6 @@ public class Interfaz extends javax.swing.JFrame {
     private void initComponents() {
 
         fileChooser = new javax.swing.JFileChooser();
-        jPanel1 = new javax.swing.JPanel();
-        BtnBorrar = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         jLabel3 = new javax.swing.JLabel();
         cbFont = new javax.swing.JComboBox<>();
@@ -79,6 +83,8 @@ public class Interfaz extends javax.swing.JFrame {
         cbSize = new javax.swing.JComboBox<>();
         Negrita = new javax.swing.JCheckBox();
         Cursiva = new javax.swing.JCheckBox();
+        jPanel1 = new javax.swing.JPanel();
+        BtnBorrar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuArchivo = new javax.swing.JMenu();
         ArchivoAbrir = new javax.swing.JMenuItem();
@@ -106,39 +112,6 @@ public class Interfaz extends javax.swing.JFrame {
         OpcColor = new javax.swing.JMenuItem();
 
         fileChooser.setDialogTitle("Explorador de Archivos");
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Editor 2D");
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.setPreferredSize(new java.awt.Dimension(300, 379));
-        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jPanel1MousePressed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 637, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 372, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
-
-        BtnBorrar.setText("Borrar");
-        BtnBorrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnBorrarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(BtnBorrar, java.awt.BorderLayout.SOUTH);
 
         jToolBar1.setRollover(true);
 
@@ -188,7 +161,38 @@ public class Interfaz extends javax.swing.JFrame {
         });
         jToolBar1.add(Cursiva);
 
-        getContentPane().add(jToolBar1, java.awt.BorderLayout.PAGE_START);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Editor 2D");
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setPreferredSize(new java.awt.Dimension(300, 379));
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel1MousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 637, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 396, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        BtnBorrar.setText("Borrar");
+        BtnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBorrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(BtnBorrar, java.awt.BorderLayout.SOUTH);
 
         MenuArchivo.setText("Archivo");
 
@@ -357,6 +361,7 @@ public class Interfaz extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void ImagenAgregaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImagenAgregaActionPerformed
+        modo = 8;
         descripcion = "*.Imagenes";
         filtro = new FileNameExtensionFilter(descripcion,
                 "bmp", "png", "jpg", "jpeg");
@@ -365,7 +370,7 @@ public class Interfaz extends javax.swing.JFrame {
         valor = fileChooser.showOpenDialog(this);
         if (valor == JFileChooser.APPROVE_OPTION) {
             label = new JLabel();
-            label.setBounds(10, 10, 600, 579);
+            label.setBounds(0, 0, 600, 579);
             jPanel1.add(label);
             archivoElegido = fileChooser.getSelectedFile();
             path = archivoElegido.getAbsolutePath();
@@ -377,6 +382,17 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ImagenAgregaActionPerformed
 
+    private void dibujarImg(String path){
+        label = new JLabel();
+        label.setBounds(0, 0, 600, 579);
+        jPanel1.add(label);
+        try {
+            label.setIcon(redimension(path));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    
     private void ArchivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoAbrirActionPerformed
         descripcion = "*.Grafico";
         filtro = new FileNameExtensionFilter(descripcion,
@@ -388,6 +404,7 @@ public class Interfaz extends javax.swing.JFrame {
             archivoElegido = fileChooser.getSelectedFile();
             System.out.println(archivoElegido);
            try {
+               this.jsonArray = new JSONArray();
                 JSONParser parse = new JSONParser();
                 String data = new String (Files.readAllBytes(Paths.get
                                         (archivoElegido.getAbsolutePath())));
@@ -395,30 +412,54 @@ public class Interfaz extends javax.swing.JFrame {
                 Object obj = parse.parse(data);
                 JSONObject newJson = (JSONObject) obj;
                 JSONArray jsonArrayNew = (JSONArray) newJson.get("data");
-                Graphics g = getGraphics();
-                Graphics2D g2 = (Graphics2D) g;
                 for(int i = 0; i < jsonArrayNew.size(); i++) {
+                    Graphics g = getGraphics();
+                    Graphics2D g2 = (Graphics2D) g;
                     JSONObject json = (JSONObject) jsonArrayNew.get(i);
-                    modo = Integer.parseInt(json.get("Modo").toString());
-                    rojo = Integer.parseInt(json.get("Rojo").toString());
-                    verde = Integer.parseInt(json.get("Verde").toString());
-                    azul = Integer.parseInt(json.get("Azul").toString());
-                    color = new Color(rojo, verde, azul);
-                    grosor = Integer.parseInt(json.get("Grosor").toString());
-                    xInicial = Integer.parseInt(json.get("xInicial").
+                    this.modo = Integer.parseInt(json.get("Modo").toString());
+                    if(modo == 7) {
+                        this.text = false;
+                        this.mouseX = Integer.parseInt(json.get("MouseX").
                                 toString());
-                    xFinal = Integer.parseInt(json.get("xFinal").toString());
-                    yInicial = Integer.parseInt(json.get("yInicial").
+                        this.mouseY = Integer.parseInt(json.get("MouseY").
                                 toString());
-                    yFinal = Integer.parseInt(json.get("yFinal").toString());
-                    mouseX = Integer.parseInt(json.get("MouseX").toString());
-                    mouseY = Integer.parseInt(json.get("MouseY").toString());
-                    texto = json.get("Texto").toString();
-                    familia = json.get("Familia").toString();
-                    estilo = Integer.parseInt(json.get("Estilo").toString());
-                    size = Integer.parseInt(json.get("Size").toString());
-                    fuente = new Font(familia, estilo, size);
-                    dibujaFigura(g);
+                        this.texto = json.get("Texto").toString();
+                        this.familia = json.get("Familia").toString();
+                        this.estilo = Integer.parseInt(json.get("Estilo").
+                                toString());
+                        this.size = Integer.parseInt(json.get("Size").
+                                toString());
+                        this.fuente = new Font(familia, estilo, size);
+                    this.rojo = Integer.parseInt(json.get("Rojo").toString());
+                    this.verde = Integer.parseInt(json.get("Verde").toString());
+                    this.azul = Integer.parseInt(json.get("Azul").toString());
+                    this.color = new Color(rojo, verde, azul);
+                        this.escribirTexto(g);
+                    } else if (modo == 8){
+                        this.path = json.get("Path").toString();
+                        this.dibujarImg(path);
+                    }
+                    else {
+                        this.grosor = Integer.parseInt(json.get("Grosor").
+                                toString());
+                        this.xInicial = Integer.parseInt(json.get("xInicial").
+                                    toString());
+                        this.xFinal = Integer.parseInt(json.get("xFinal").
+                                toString());
+                        this.yInicial = Integer.parseInt(json.get("yInicial").
+                                    toString());
+                        this.yFinal = Integer.parseInt(json.get("yFinal").
+                                toString());
+                        
+                    this.rojo = Integer.parseInt(json.get("Rojo").
+                            toString());
+                    this.verde = Integer.parseInt(json.get("Verde").
+                            toString());
+                    this.azul = Integer.parseInt(json.get("Azul").
+                            toString());
+                    this.color = new Color(rojo, verde, azul);
+                        dibujaFigura(g);
+                    }
                 }
             } catch(Exception e) {
                 System.err.println("Error lectura archivo:" + e);
@@ -458,7 +499,7 @@ public class Interfaz extends javax.swing.JFrame {
     private void BtnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBorrarActionPerformed
        jPanel1.removeAll();
        jsonArray = new JSONArray();
-       jPanel1.repaint();     
+       jPanel1.repaint();
     }//GEN-LAST:event_BtnBorrarActionPerformed
 
     private void OpcColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpcColorActionPerformed
@@ -568,15 +609,17 @@ public class Interfaz extends javax.swing.JFrame {
         fig = false;
         modo = 7;
         text = true;
+        frame.setVisible(true);
     }//GEN-LAST:event_TextoAgregarActionPerformed
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
-        mouseX = evt.getX();
-        mouseY = evt.getY();
-
-        Graphics g = jPanel1.getGraphics();
-        escribirTexto(g);
-        if (fig == true) {
+       Graphics g = jPanel1.getGraphics();
+        if(this.text) {
+            this.mouseX = evt.getX();
+            this.mouseY = evt.getY();
+            escribirTexto(g);
+        }
+        if (fig) {
             if (inicio) {
                 xInicial = evt.getX();
                 yInicial = evt.getY();
@@ -617,38 +660,29 @@ public class Interfaz extends javax.swing.JFrame {
     public void escribirTexto(Graphics g){
         Graphics2D gText = (Graphics2D) g;
         
-        if(text == true){
+        if(text){
             texto = JOptionPane.showInputDialog("");
-            if(texto != null){
-                if (fuente == null){
-                    fuente = new Font("Arial", Font.PLAIN, 12);
-                }
-                gText.setFont(fuente);
-                //Obtiene parametros de la fuente
-                familia = fuente.getFamily();
-                estilo = fuente.getStyle();
-                size = fuente.getSize();
-                if(color == null){
-                    color = new Color(0, 0, 0);
-                }
-                gText.setColor(color);
-                rojo = color.getRed();
-                verde = color.getGreen();
-                azul = color.getBlue();
-                gText.drawString(texto, mouseX, mouseY);
-                saveJson(modo, texto, mouseX, mouseY, rojo, verde, azul,
-                        familia, estilo, size, gText);
-            }
+            this.text = false;
         }
-    }
-    
-    public void desplegarTexto(Graphics g){
-        Graphics2D gText = (Graphics2D) g;
-        
         if(texto != null){
+            if (fuente == null){
+                fuente = new Font("Arial", Font.PLAIN, 12);
+            }
             gText.setFont(fuente);
+            //Obtiene parametros de la fuente
+            familia = fuente.getFamily();
+            estilo = fuente.getStyle();
+            size = fuente.getSize();
+            if(color == null){
+                color = new Color(0, 0, 0);
+            }
             gText.setColor(color);
+            rojo = color.getRed();
+            verde = color.getGreen();
+            azul = color.getBlue();
             gText.drawString(texto, mouseX, mouseY);
+            saveJson(modo, texto, mouseX, mouseY, rojo, verde, azul,
+                    familia, estilo, size, gText);
         }
     }
     
@@ -658,6 +692,7 @@ public class Interfaz extends javax.swing.JFrame {
         Image newImg = img.getScaledInstance(label.getWidth(), 
                         label.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(newImg);
+        saveJson();
         return image;
     }
     
@@ -744,13 +779,6 @@ public class Interfaz extends javax.swing.JFrame {
                 saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto,
                         rojo, verde, azul, grosor, g2);
                 break;
-            case 7:
-                if (texto.isEmpty()){
-                    escribirTexto(g);
-                } else {
-                    desplegarTexto(g);
-                }
-                break;
             default:
                 throw new AssertionError();
         }
@@ -779,7 +807,7 @@ public class Interfaz extends javax.swing.JFrame {
         JSONObject json = new JSONObject();
         
         json.put("Modo", modo);
-        json.put("xInicial" ,xInicial);
+        json.put("xInicial" , xInicial);
         json.put("yInicial", yInicial);
         json.put("xFinal", xFinal);
         json.put("yFinal", yFinal);
@@ -808,6 +836,15 @@ public class Interfaz extends javax.swing.JFrame {
         json.put("Estilo", estilo);
         json.put("Size", size);
         jsonArray.add(json);
+    }
+    
+    private void saveJson(){
+        JSONObject json = new JSONObject();
+        
+        json.put("Modo", modo);
+        json.put("Path", this.path);
+        jsonArray.add(json);
+        System.out.println(jsonArray);
     }
     
     public static void main(String args[]) {
