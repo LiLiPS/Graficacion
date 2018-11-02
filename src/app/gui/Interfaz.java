@@ -35,6 +35,7 @@ import org.json.simple.parser.JSONParser;
  * @author Arantxa Patricia Ibarra Muñoz
  */
 public class Interfaz extends javax.swing.JFrame {
+
     //Variables Globales
     private String descripcion, path, texto, familia;
     private int valor, mouseX, mouseY, xInicial, xFinal, yInicial, yFinal, modo;
@@ -48,7 +49,7 @@ public class Interfaz extends javax.swing.JFrame {
     private JSONArray jsonArray;
     private JOptionPane j;
     private final JFrame frame;
-    
+
     public Interfaz() {
         initComponents();
         //Inicializacion variables globales
@@ -59,16 +60,17 @@ public class Interfaz extends javax.swing.JFrame {
         fig = false;
         jsonArray = new JSONArray();
         frame = new JFrame();
+        //Armado de segundo frame
         frame.add(this.jToolBar1);
+        //Acomodo componentes
         this.jToolBar1.setSize(700, 41);
         frame.setSize(800, 100);
-        //Acomodo componentes
         this.setResizable(false);
         this.setSize(1000, 700);
         this.setLocationRelativeTo(null);
         jPanel1.setVisible(true);
         //Llamada a metodos
-        loadFont(); 
+        loadFont();
     }
 
     @SuppressWarnings("unchecked")
@@ -359,7 +361,7 @@ public class Interfaz extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void ImagenAgregaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ImagenAgregaActionPerformed
         modo = 8;
         descripcion = "*.Imagenes";
@@ -376,23 +378,12 @@ public class Interfaz extends javax.swing.JFrame {
             path = archivoElegido.getAbsolutePath();
             try {
                 label.setIcon(redimension(path));
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }//GEN-LAST:event_ImagenAgregaActionPerformed
 
-    private void dibujarImg(String path){
-        label = new JLabel();
-        label.setBounds(0, 0, 600, 579);
-        jPanel1.add(label);
-        try {
-            label.setIcon(redimension(path));
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    
     private void ArchivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoAbrirActionPerformed
         descripcion = "*.Grafico";
         filtro = new FileNameExtensionFilter(descripcion,
@@ -402,71 +393,75 @@ public class Interfaz extends javax.swing.JFrame {
         valor = fileChooser.showOpenDialog(this);
         if (valor == JFileChooser.APPROVE_OPTION) {
             archivoElegido = fileChooser.getSelectedFile();
-            System.out.println(archivoElegido);
-           try {
-               this.jsonArray = new JSONArray();
+            //System.out.println(archivoElegido);
+            try {
+                this.jsonArray = new JSONArray();
                 JSONParser parse = new JSONParser();
-                String data = new String (Files.readAllBytes(Paths.get
-                                        (archivoElegido.getAbsolutePath())));
-                System.out.println(data);
+                String data = new String(Files.readAllBytes(Paths.get
+                                (archivoElegido.getAbsolutePath())));
                 Object obj = parse.parse(data);
                 JSONObject newJson = (JSONObject) obj;
                 JSONArray jsonArrayNew = (JSONArray) newJson.get("data");
-                for(int i = 0; i < jsonArrayNew.size(); i++) {
+                for (int i = 0; i < jsonArrayNew.size(); i++) {
                     Graphics g = getGraphics();
                     Graphics2D g2 = (Graphics2D) g;
                     JSONObject json = (JSONObject) jsonArrayNew.get(i);
                     this.modo = Integer.parseInt(json.get("Modo").toString());
-                    if(modo == 7) {
-                        this.text = false;
-                        this.mouseX = Integer.parseInt(json.get("MouseX").
-                                toString());
-                        this.mouseY = Integer.parseInt(json.get("MouseY").
-                                toString());
-                        this.texto = json.get("Texto").toString();
-                        this.familia = json.get("Familia").toString();
-                        this.estilo = Integer.parseInt(json.get("Estilo").
-                                toString());
-                        this.size = Integer.parseInt(json.get("Size").
-                                toString());
-                        this.fuente = new Font(familia, estilo, size);
-                    this.rojo = Integer.parseInt(json.get("Rojo").toString());
-                    this.verde = Integer.parseInt(json.get("Verde").toString());
-                    this.azul = Integer.parseInt(json.get("Azul").toString());
-                    this.color = new Color(rojo, verde, azul);
-                        this.escribirTexto(g);
-                    } else if (modo == 8){
-                        this.path = json.get("Path").toString();
-                        this.dibujarImg(path);
-                    }
-                    else {
-                        this.grosor = Integer.parseInt(json.get("Grosor").
-                                toString());
-                        this.xInicial = Integer.parseInt(json.get("xInicial").
+                    switch (modo) {
+                        case 7:
+                            this.text = false;
+                            this.mouseX = Integer.parseInt(json.get("MouseX").
                                     toString());
-                        this.xFinal = Integer.parseInt(json.get("xFinal").
-                                toString());
-                        this.yInicial = Integer.parseInt(json.get("yInicial").
+                            this.mouseY = Integer.parseInt(json.get("MouseY").
                                     toString());
-                        this.yFinal = Integer.parseInt(json.get("yFinal").
-                                toString());
-                        
-                    this.rojo = Integer.parseInt(json.get("Rojo").
-                            toString());
-                    this.verde = Integer.parseInt(json.get("Verde").
-                            toString());
-                    this.azul = Integer.parseInt(json.get("Azul").
-                            toString());
-                    this.color = new Color(rojo, verde, azul);
-                        dibujaFigura(g);
+                            this.texto = json.get("Texto").toString();
+                            this.familia = json.get("Familia").toString();
+                            this.estilo = Integer.parseInt(json.get("Estilo").
+                                    toString());
+                            this.size = Integer.parseInt(json.get("Size").
+                                    toString());
+                            this.fuente = new Font(familia, estilo, size);
+                            this.rojo = Integer.parseInt(json.get("Rojo").
+                                    toString());
+                            this.verde = Integer.parseInt(json.get("Verde").
+                                    toString());
+                            this.azul = Integer.parseInt(json.get("Azul").
+                                    toString());
+                            this.color = new Color(rojo, verde, azul);
+                            this.escribirTexto(g);
+                            break;
+                        case 8:
+                            this.path = json.get("Path").toString();
+                            this.dibujarImg(path);
+                            break;
+                        default:
+                            this.grosor = Integer.parseInt(json.get("Grosor").
+                                    toString());
+                            this.xInicial = Integer.parseInt(json.get
+                                    ("xInicial").toString());
+                            this.xFinal = Integer.parseInt(json.get("xFinal").
+                                    toString());
+                            this.yInicial = Integer.parseInt(json.get
+                                    ("yInicial").toString());
+                            this.yFinal = Integer.parseInt(json.get("yFinal").
+                                    toString());
+                            this.rojo = Integer.parseInt(json.get("Rojo").
+                                    toString());
+                            this.verde = Integer.parseInt(json.get("Verde").
+                                    toString());
+                            this.azul = Integer.parseInt(json.get("Azul").
+                                    toString());
+                            this.color = new Color(rojo, verde, azul);
+                            dibujaFigura(g);
+                            break;
                     }
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.err.println("Error lectura archivo:" + e);
             }
         }
     }//GEN-LAST:event_ArchivoAbrirActionPerformed
-    
+
     private void FormaLineaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaLineaMousePressed
         modo = 0;
         fig = true;
@@ -485,11 +480,6 @@ public class Interfaz extends javax.swing.JFrame {
         text = false;
     }//GEN-LAST:event_FormaOvaloMousePressed
 
-    //Eliminar
-    private void FormaTriangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaTriangMousePressed
-        
-    }//GEN-LAST:event_FormaTriangMousePressed
-    
     private void FormaElipseMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FormaElipseMousePressed
         modo = 3;
         fig = true;
@@ -497,39 +487,38 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_FormaElipseMousePressed
 
     private void BtnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBorrarActionPerformed
-       jPanel1.removeAll();
-       jsonArray = new JSONArray();
-       jPanel1.repaint();
+        jPanel1.removeAll();
+        jsonArray = new JSONArray();
+        jPanel1.repaint();
     }//GEN-LAST:event_BtnBorrarActionPerformed
 
     private void OpcColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpcColorActionPerformed
-        //Abre en un cuadro de dialogo el color chooser y lo guarda
-        color = JColorChooser.showDialog(null, "Choose a Color", Color.BLUE);     
+       color = JColorChooser.showDialog(null, "Choose a Color", Color.BLUE);
     }//GEN-LAST:event_OpcColorActionPerformed
 
     private void Grosor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor1ActionPerformed
-        grosor=0;  
+        grosor = 0;
         Grosor2.setSelected(false);
         Grosor3.setSelected(false);
         Grosor4.setSelected(false);
     }//GEN-LAST:event_Grosor1ActionPerformed
 
     private void Grosor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor2ActionPerformed
-        grosor=1;
+        grosor = 1;
         Grosor1.setSelected(false);
         Grosor3.setSelected(false);
         Grosor4.setSelected(false);
     }//GEN-LAST:event_Grosor2ActionPerformed
 
     private void Grosor3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor3ActionPerformed
-        grosor=2;
+        grosor = 2;
         Grosor1.setSelected(false);
         Grosor2.setSelected(false);
         Grosor4.setSelected(false);
     }//GEN-LAST:event_Grosor3ActionPerformed
 
     private void Grosor4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Grosor4ActionPerformed
-        grosor=3;
+        grosor = 3;
         Grosor1.setSelected(false);
         Grosor2.setSelected(false);
         Grosor3.setSelected(false);
@@ -537,12 +526,12 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void cbFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFontActionPerformed
         fuente = new Font(cbFont.getSelectedItem().toString(),
-        Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString()));
+                Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString()));
     }//GEN-LAST:event_cbFontActionPerformed
 
     private void cbSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSizeActionPerformed
         fuente = new Font(cbFont.getSelectedItem().toString(),
-        Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString()));
+                Font.PLAIN, Integer.parseInt(cbSize.getSelectedItem().toString()));
     }//GEN-LAST:event_cbSizeActionPerformed
 
     private void RectangRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RectangRellenoActionPerformed
@@ -565,7 +554,6 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void NegritaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_NegritaItemStateChanged
         if (Negrita.isSelected() && Cursiva.isSelected()) {
-            //cambie el texto a negrita y cursiva
             fuente = new Font(cbFont.getSelectedItem().toString(),
                     Font.BOLD | Font.ITALIC,
                     Integer.parseInt(cbSize.getSelectedItem().toString()));
@@ -586,21 +574,20 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void CursivaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CursivaItemStateChanged
         if (Negrita.isSelected() && Cursiva.isSelected()) {
-            //cambie el texto a negrita y cursiva
             fuente = new Font(cbFont.getSelectedItem().toString(),
-                    Font.BOLD | Font.ITALIC, 
+                    Font.BOLD | Font.ITALIC,
                     Integer.parseInt(cbSize.getSelectedItem().toString()));
 
         } else if (Cursiva.isSelected()) {
             //Cambie el texto a cursiva
-            fuente = new Font(cbFont.getSelectedItem().toString(), Font.ITALIC, 
+            fuente = new Font(cbFont.getSelectedItem().toString(), Font.ITALIC,
                     Integer.parseInt(cbSize.getSelectedItem().toString()));
 
         } else if (Negrita.isSelected()) {
             fuente = new Font(cbFont.getSelectedItem().toString(), Font.BOLD,
                     Integer.parseInt(cbSize.getSelectedItem().toString()));
         } else {
-            fuente = new Font(cbFont.getSelectedItem().toString(),Font.PLAIN, 
+            fuente = new Font(cbFont.getSelectedItem().toString(), Font.PLAIN,
                     Integer.parseInt(cbSize.getSelectedItem().toString()));
         }
     }//GEN-LAST:event_CursivaItemStateChanged
@@ -613,8 +600,9 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_TextoAgregarActionPerformed
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
-       Graphics g = jPanel1.getGraphics();
-        if(this.text) {
+        Graphics g = jPanel1.getGraphics();
+        
+        if (this.text) {
             this.mouseX = evt.getX();
             this.mouseY = evt.getY();
             escribirTexto(g);
@@ -635,19 +623,19 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void ArchivoGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoGuardarActionPerformed
         int save;
-        
+
         fileChooser.setCurrentDirectory(new File("C:\\"));
         save = fileChooser.showSaveDialog(null);
         if (save == JFileChooser.APPROVE_OPTION) {
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject json = (JSONObject) jsonArray.get(i);
-                System.out.println(json);
+                //System.out.println(json);
             }
             try {
                 JSONObject finalJ = new JSONObject();
                 finalJ.put("data", jsonArray);
-                FileWriter fw = new FileWriter(fileChooser.getSelectedFile() + 
-                                                ".graf");
+                FileWriter fw = new FileWriter(fileChooser.getSelectedFile()
+                        + ".graf");
                 fw.write(finalJ.toString());
                 fw.flush();
                 fw.close();
@@ -656,16 +644,16 @@ public class Interfaz extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_ArchivoGuardarActionPerformed
-    
-    public void escribirTexto(Graphics g){
+
+    public void escribirTexto(Graphics g) {
         Graphics2D gText = (Graphics2D) g;
-        
-        if(text){
+
+        if (text) {
             texto = JOptionPane.showInputDialog("");
             this.text = false;
         }
-        if(texto != null){
-            if (fuente == null){
+        if (texto != null) {
+            if (fuente == null) {
                 fuente = new Font("Arial", Font.PLAIN, 12);
             }
             gText.setFont(fuente);
@@ -673,7 +661,7 @@ public class Interfaz extends javax.swing.JFrame {
             familia = fuente.getFamily();
             estilo = fuente.getStyle();
             size = fuente.getSize();
-            if(color == null){
+            if (color == null) {
                 color = new Color(0, 0, 0);
             }
             gText.setColor(color);
@@ -681,24 +669,35 @@ public class Interfaz extends javax.swing.JFrame {
             verde = color.getGreen();
             azul = color.getBlue();
             gText.drawString(texto, mouseX, mouseY);
-            saveJson(modo, texto, mouseX, mouseY, rojo, verde, azul,
-                    familia, estilo, size, gText);
+            saveJson(modo, texto, mouseX, mouseY, rojo, verde, azul, familia,
+                    estilo, size, gText);
         }
     }
-    
+
     public ImageIcon redimension(String ImagePath) {
         ImageIcon MyImage = new ImageIcon(ImagePath);
         Image img = MyImage.getImage();
-        Image newImg = img.getScaledInstance(label.getWidth(), 
-                        label.getHeight(), Image.SCALE_SMOOTH);
+        Image newImg = img.getScaledInstance(label.getWidth(),
+                label.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(newImg);
         saveJson();
         return image;
     }
-    
+
+    private void dibujarImg(String path) {
+        label = new JLabel();
+        label.setBounds(0, 0, 600, 579);
+        jPanel1.add(label);
+        try {
+            label.setIcon(redimension(path));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void loadFont() {
-        GraphicsEnvironment gEnv = 
-                GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsEnvironment gEnv
+                = GraphicsEnvironment.getLocalGraphicsEnvironment();
         //Obtiene todas las fuentes
         String[] fontNames = gEnv.getAvailableFontFamilyNames();
         // Las agrega al ComboBox
@@ -707,16 +706,14 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     public void dibujaFigura(Graphics g) {
-        //Convierte Graphics a Graphics2D para poder cambiar grosor
         Graphics2D g2 = (Graphics2D) g;
         Shape elipse;
         int ancho, alto;
-        
+
         ancho = xFinal - xInicial;
         alto = yFinal - yInicial;
-        
-        //Si no escogen color, el predeterminado es negro
-        if(color == null){
+
+        if (color == null) {
             color = new Color(0, 0, 0);
         }
         g.setColor(color);
@@ -725,7 +722,6 @@ public class Interfaz extends javax.swing.JFrame {
         verde = color.getGreen();
         azul = color.getBlue();
 
-        //Segun el RadioButton elegido cambia el grosor de linea
         switch (grosor) {
             case 0:
                 g2.setStroke(new BasicStroke(1));
@@ -740,7 +736,7 @@ public class Interfaz extends javax.swing.JFrame {
                 g2.setStroke(new BasicStroke(4));
                 break;
         }
-        
+
         switch (modo) {
             case 0:
                 g2.drawLine(xInicial, yInicial, xFinal, yFinal);
@@ -749,18 +745,18 @@ public class Interfaz extends javax.swing.JFrame {
                 break;
             case 1:
                 g2.drawOval(xInicial, yInicial, ancho, alto);
-                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto, 
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto,
                         rojo, verde, azul, grosor, g2);
                 break;
             case 2:
                 g2.drawRect(xInicial, yInicial, ancho, alto);
-                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto, 
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto,
                         rojo, verde, azul, grosor, g2);
                 break;
             case 3:
                 elipse = new Ellipse2D.Float(xInicial, yInicial, ancho, alto);
                 g2.draw(elipse);
-                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto, 
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto,
                         rojo, verde, azul, grosor, g2);
                 break;
             case 4:
@@ -770,7 +766,7 @@ public class Interfaz extends javax.swing.JFrame {
                 break;
             case 5:
                 g2.fillOval(xInicial, yInicial, ancho, alto);
-                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto, 
+                saveJson(modo, xInicial, yInicial, xFinal, yFinal, ancho, alto,
                         rojo, verde, azul, grosor, g2);
                 break;
             case 6:
@@ -783,14 +779,14 @@ public class Interfaz extends javax.swing.JFrame {
                 throw new AssertionError();
         }
     }
-    
-    private void saveJson(int modo, int xInicial, int yInicial, 
+
+    private void saveJson(int modo, int xInicial, int yInicial,
             int xFinal, int yFinal, int rojo, int verde, int azul, int grosor,
             Graphics2D g2) {
         JSONObject json = new JSONObject();
-        
+
         json.put("Modo", modo);
-        json.put("xInicial" ,xInicial);
+        json.put("xInicial", xInicial);
         json.put("yInicial", yInicial);
         json.put("xFinal", xFinal);
         json.put("yFinal", yFinal);
@@ -800,14 +796,14 @@ public class Interfaz extends javax.swing.JFrame {
         json.put("Grosor", grosor);
         jsonArray.add(json);
     }
-    
-    private void saveJson(int modo, int xInicial, int yInicial, 
-            int xFinal, int yFinal, int ancho, int alto, int rojo, int verde, 
+
+    private void saveJson(int modo, int xInicial, int yInicial,
+            int xFinal, int yFinal, int ancho, int alto, int rojo, int verde,
             int azul, int grosor, Graphics2D g2) {
         JSONObject json = new JSONObject();
-        
+
         json.put("Modo", modo);
-        json.put("xInicial" , xInicial);
+        json.put("xInicial", xInicial);
         json.put("yInicial", yInicial);
         json.put("xFinal", xFinal);
         json.put("yFinal", yFinal);
@@ -819,15 +815,15 @@ public class Interfaz extends javax.swing.JFrame {
         json.put("Grosor", grosor);
         jsonArray.add(json);
     }
-    
+
     private void saveJson(int modo, String texto, int mouseX, int mouseY,
             int rojo, int verde, int azul, String familia, int estilo, int size,
-            Graphics2D g2){
+            Graphics2D g2) {
         JSONObject json = new JSONObject();
-        
+
         json.put("Modo", modo);
         json.put("Texto", texto);
-        json.put("MouseX" ,mouseX);
+        json.put("MouseX", mouseX);
         json.put("MouseY", mouseY);
         json.put("Rojo", rojo);
         json.put("Verde", verde);
@@ -837,16 +833,15 @@ public class Interfaz extends javax.swing.JFrame {
         json.put("Size", size);
         jsonArray.add(json);
     }
-    
-    private void saveJson(){
+
+    private void saveJson() {
         JSONObject json = new JSONObject();
-        
+
         json.put("Modo", modo);
         json.put("Path", this.path);
         jsonArray.add(json);
-        System.out.println(jsonArray);
     }
-    
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
